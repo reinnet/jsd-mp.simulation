@@ -4,7 +4,7 @@ import com.yacl4j.core.ConfigurationBuilder;
 import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Link;
 import home.parham.roadtomsc.domain.Node;
-import home.parham.roadtomsc.domain.Type;
+import home.parham.roadtomsc.domain.Types;
 import home.parham.roadtomsc.model.Config;
 import home.parham.roadtomsc.model.Model;
 import ilog.concert.IloException;
@@ -101,9 +101,9 @@ public class Main {
 
         // VNF types {{{
         config.getTypes().forEach(typeConfig -> {
-            Type.add(typeConfig.getCores(), typeConfig.getRam(),typeConfig.getEgress(),
+            Types.add(typeConfig.getCores(), typeConfig.getRam(),typeConfig.getEgress(),
                     typeConfig.getIngress(), typeConfig.getManageable());
-            types.put(typeConfig.getName(), Type.len() - 1);
+            types.put(typeConfig.getName(), Types.len() - 1);
             logger.info(String.format("create virtual type %s [cores: %d, ram: %d, egress: %b, ingress: %b]",
                     typeConfig.getName(),
                     typeConfig.getCores(),

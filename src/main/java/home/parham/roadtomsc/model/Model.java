@@ -1,7 +1,7 @@
 package home.parham.roadtomsc.model;
 
 import home.parham.roadtomsc.domain.Chain;
-import home.parham.roadtomsc.domain.Type;
+import home.parham.roadtomsc.domain.Types;
 import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
 import ilog.concert.IloLinearIntExpr;
@@ -14,7 +14,7 @@ import ilog.concert.IloModeler;
  */
 public class Model {
     /**
-     * modeler is a cplex model builder.
+     * modeler is a CPLEX model builder.
      */
     private final IloModeler modeler;
 
@@ -286,8 +286,8 @@ public class Model {
             cpuConstraint.addTerm(this.cfg.getVnfmCores(), this.yHat[i]); // VNFMs cpu
 
             for (int j = 0; j < this.cfg.getF(); j++) {
-                ramConstraint.addTerm(Type.get(j).getRam(), this.y[i][j]); // instance ram
-                cpuConstraint.addTerm(Type.get(j).getCores(), this.y[i][j]); // instance cpu
+                ramConstraint.addTerm(Types.get(j).getRam(), this.y[i][j]); // instance ram
+                cpuConstraint.addTerm(Types.get(j).getCores(), this.y[i][j]); // instance cpu
             }
 
             this.modeler.addLe(cpuConstraint, this.cfg.getNodes().get(i).getCores(),
@@ -367,7 +367,7 @@ public class Model {
      */
     private void egressConstraint() throws IloException {
         for (int i = 0; i < this.cfg.getF(); i++) {
-            if (!Type.get(i).isEgress()) { // do the following only for egress types
+            if (!Types.get(i).isEgress()) { // do the following only for egress types
                 continue;
             }
             for (int j = 0; j < this.cfg.getW(); j++) {
@@ -385,7 +385,7 @@ public class Model {
      */
     private void ingressConstraint() throws IloException {
         for (int i = 0; i < this.cfg.getF(); i++) {
-            if (!Type.get(i).isIngress()) { // do the following only for ingress types
+            if (!Types.get(i).isIngress()) { // do the following only for ingress types
                 continue;
             }
             for (int j = 0; j < this.cfg.getW(); j++) {
@@ -457,7 +457,7 @@ public class Model {
             for (int k = 0; k < this.cfg.getChains().get(h).nodes(); k++) {
                 for (int i = 0; i < this.cfg.getF(); i++) {
 
-                    if (!Type.get(i).isManageable()) {
+                    if (!Types.get(i).isManageable()) {
                         continue;
                     }
 

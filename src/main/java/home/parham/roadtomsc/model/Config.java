@@ -3,10 +3,9 @@ package home.parham.roadtomsc.model;
 import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Link;
 import home.parham.roadtomsc.domain.Node;
-import home.parham.roadtomsc.domain.Type;
+import home.parham.roadtomsc.domain.Types;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * Config represents problem configuration
@@ -138,7 +137,7 @@ public class Config {
         }
 
         // VNF types
-        this.F = Type.len();
+        this.F = Types.len();
 
         // SFC requests
         this.T = chains.size();
