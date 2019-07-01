@@ -1,6 +1,8 @@
 package home.parham.roadtomsc.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Chain {
     private ArrayList<Types.Type> chain;
@@ -14,14 +16,12 @@ public class Chain {
         this.cost = cost;
     }
 
-    public Chain addNode(int id) {
+    public void addNode(int id) {
         this.chain.add(Types.get(id));
-        return this;
     }
 
-    public Chain addLink(int bandwidth, int source, int destination) {
+    public void addLink(int bandwidth, int source, int destination) {
         this.links.add(new Link(bandwidth, source, destination));
-        return this;
     }
 
     public Types.Type getNode(int index) {
@@ -30,6 +30,10 @@ public class Chain {
 
     public Link getLink(int index) {
         return this.links.get(index);
+    }
+
+    public List<Types.Type> getNodes() {
+        return Collections.unmodifiableList(this.chain);
     }
 
     public int nodes() {
