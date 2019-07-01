@@ -207,6 +207,14 @@ public class Main {
                 writer.println();
 
                 writer.println();
+                writer.println(" >> Manager instances");
+                for (int i = 0; i < cfg.getW(); i++) {
+                    writer.printf("%s has %d manager instances\n",
+                            cfg.getNodes().get(i).getName(), (int) cplex.getValue(model.getyHat()[i]));
+                }
+                writer.println();
+
+                writer.println();
                 writer.println(" >> Instance and Management links");
                 int u = 0;
                 v = 0;
