@@ -6,6 +6,8 @@ import home.parham.roadtomsc.domain.Node;
 import home.parham.roadtomsc.domain.Types;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Config represents problem configuration
@@ -155,16 +157,16 @@ public class Config {
         return build;
     }
 
-    public ArrayList<Node> getNodes() {
-        return nodes;
+    public List<Node> getNodes() {
+        return Collections.unmodifiableList(nodes);
     }
 
     public int getW() {
         return W;
     }
 
-    public ArrayList<Link> getLinks() {
-        return links;
+    public List<Link> getLinks() {
+        return Collections.unmodifiableList(links);
     }
 
     public int[][] getE() {
@@ -175,8 +177,8 @@ public class Config {
         return F;
     }
 
-    public ArrayList<Chain> getChains() {
-        return chains;
+    public List<Chain> getChains() {
+        return Collections.unmodifiableList(chains);
     }
 
     public int getT() {
