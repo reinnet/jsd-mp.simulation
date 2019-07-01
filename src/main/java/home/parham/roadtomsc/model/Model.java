@@ -93,10 +93,6 @@ public class Model {
      */
     public Model(final IloModeler pModeler, final Config pCfg) {
         this.modeler = pModeler;
-        if (!pCfg.isBuild()) {
-            throw new IllegalArgumentException("Configuration"
-                    + "must build before use");
-        }
         this.cfg = pCfg;
     }
 

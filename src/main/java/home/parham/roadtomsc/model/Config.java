@@ -3,9 +3,7 @@ package home.parham.roadtomsc.model;
 import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Link;
 import home.parham.roadtomsc.domain.Node;
-import home.parham.roadtomsc.domain.Types;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,15 +15,9 @@ import java.util.List;
 public class Config {
 
     /**
-     * Shows build status of configuration.
-     * this variable will set to true if the configuration build is successful.
-     */
-    private boolean build;
-
-    /**
      * physical nodes
      */
-    private ArrayList<Node> nodes;
+    private List<Node> nodes;
 
     /**
      * number of physical nodes
@@ -35,7 +27,7 @@ public class Config {
     /**
      * physical links
      */
-    private ArrayList<Link> links;
+    private List<Link> links;
 
     /**
      * connectivity matrix
@@ -50,7 +42,7 @@ public class Config {
     /**
      * SFC requests chains
      */
-    private ArrayList<Chain> chains;
+    private List<Chain> chains;
 
     /**
      * number of SFC requests
@@ -72,89 +64,36 @@ public class Config {
      */
     private int vnfmRam, vnfmCores, vnfmCapacity, vnfmRadius, vnfmBandwidth;
 
-    /**
-     * Initializes the configuration module with given parameters. These parameters are required constants for problem.
-     * Some optional parameters are exits that can be set manually.
-     * @param vnfmRam
-     * @param vnfmCores
-     * @param vnfmCapacity
-     * @param vnfmRadius
-     * @param vnfmBandwidth
-     */
-    public Config(int vnfmRam, int vnfmCores, int vnfmCapacity, int vnfmRadius, int vnfmBandwidth) {
+    Config(
+            List<Node> nodes,
+            int w,
+            List<Link> links,
+            int[][] e,
+            int f,
+            List<Chain> chains,
+            int t,
+            int v,
+            int u,
+            int vnfmRam,
+            int vnfmCores,
+            int vnfmCapacity,
+            int vnfmRadius,
+            int vnfmBandwidth
+    ) {
+        this.nodes = nodes;
+        W = w;
+        this.links = links;
+        E = e;
+        F = f;
+        this.chains = chains;
+        T = t;
+        V = v;
+        U = u;
         this.vnfmRam = vnfmRam;
         this.vnfmCores = vnfmCores;
         this.vnfmCapacity = vnfmCapacity;
         this.vnfmRadius = vnfmRadius;
         this.vnfmBandwidth = vnfmBandwidth;
-
-        this.links = new ArrayList<>();
-        this.chains = new ArrayList<>();
-        this.nodes = new ArrayList<>();
-
-        this.build = false;
-    }
-
-    /**
-     * Adds physical link to network topology
-     * @param link: physical link
-     */
-    public void addLink(Link link) {
-        if (!this.isBuild()) {
-            this.links.add(link);
-        }
-    }
-
-    /**
-     * Adds chain to SFC request collection, note that our problem is offline
-     * @param chain: SFC request
-     */
-    public void addChain(Chain chain) {
-        if (!this.isBuild()) {
-            this.chains.add(chain);
-        }
-    }
-
-    /**
-     * Adds physical node to network topology
-     * @param node: physical node
-     */
-    public void addNode(Node node) {
-        if (!this.isBuild()) {
-            this.nodes.add(node);
-        }
-    }
-
-    public void build() {
-        this.W = nodes.size();
-        // connectivity matrix
-        this.E = new int[this.W][this.W];
-        for (int i = 0; i < this.W; i++) {
-            for (int j = 0; j < this.W; j++) {
-                this.E[i][j] = 0;
-            }
-        }
-        for (Link link : this.links) {
-            E[link.getSource()][link.getDestination()] = link.getBandwidth();
-        }
-
-        // VNF types
-        this.F = Types.len();
-
-        // SFC requests
-        this.T = chains.size();
-
-        // Total number of VNFs and virtual links
-        for (Chain chain : chains) {
-            this.V += chain.nodes();
-            this.U += chain.links();
-        }
-
-        build = true;
-    }
-
-    public boolean isBuild() {
-        return build;
     }
 
     public List<Node> getNodes() {

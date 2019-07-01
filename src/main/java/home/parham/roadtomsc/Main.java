@@ -6,6 +6,7 @@ import home.parham.roadtomsc.domain.Link;
 import home.parham.roadtomsc.domain.Node;
 import home.parham.roadtomsc.domain.Types;
 import home.parham.roadtomsc.model.Config;
+import home.parham.roadtomsc.model.ConfigBuilder;
 import home.parham.roadtomsc.model.Model;
 import ilog.concert.IloException;
 import ilog.cplex.IloCplex;
@@ -42,13 +43,12 @@ public class Main {
 
         // build the model configuration from the loaded configuration
 
-        Config cfg = new Config(
-                config.getVNFM().getRam(),
-                config.getVNFM().getCores(),
-                config.getVNFM().getCapacity(),
-                config.getVNFM().getRadius(),
-                config.getVNFM().getBandwidth()
-        );
+        ConfigBuilder builder = new ConfigBuilder()
+                .vnfmRam(config.getVNFM().getRam())
+                .vnfmCores(config.getVNFM().getCores())
+                .vnfmCapacity(config.getVNFM().getCapacity())
+                .vnfmRadius(config.getVNFM().getRadius())
+                .vnfmBandwidth(config.getVNFM().getBandwidth());
 
         // current mapping between node identification and their index in model
         Map<String, Integer> nodes = new HashMap<>();
@@ -69,7 +69,7 @@ public class Main {
                     nodeConfig.getEgress(),
                     nodeConfig.getIngress()
             );
-            cfg.addNode(node);
+            builder.addNode(node);
             logger.info(String.format("create physical node (%s) in index %d [%s]", nodeConfig.getID(), i, node));
         }
         // }}}
@@ -81,7 +81,7 @@ public class Main {
                     nodes.get(linkConfig.getSource()),
                     nodes.get(linkConfig.getDestination())
             );
-            cfg.addLink(l1);
+            builder.addLink(l1);
             logger.info(String.format("create physical link from %s to %s [%s]",
                     linkConfig.getSource(), linkConfig.getDestination(), l1));
             Link l2 = new Link(
@@ -89,7 +89,7 @@ public class Main {
                     nodes.get(linkConfig.getDestination()),
                     nodes.get(linkConfig.getSource())
             );
-            cfg.addLink(l2);
+            builder.addLink(l2);
             logger.info(String.format("create physical link from %s to %s [%s]",
                     linkConfig.getDestination(), linkConfig.getSource(), l2));
         });
@@ -133,12 +133,12 @@ public class Main {
                     vNodes.get(linkConfig.getDestination())
             ));
 
-            cfg.addChain(chain);
+            builder.addChain(chain);
         });
         // }}}
 
         // build configuration
-        cfg.build();
+        Config cfg = builder.build();
 
         // create and setup the result file
         PrintWriter writer;
