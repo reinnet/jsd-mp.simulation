@@ -259,7 +259,6 @@ public class Model {
         this.managePlaceConstraint();
         this.vnfSupportConstraint();
         this.managerToNodeSupportConstraint();
-        this.managerCapacityConstraint();
 
         this.flowConservation();
         this.managementFlowConservation();
@@ -414,7 +413,7 @@ public class Model {
     }
 
     /**
-     * Manage Place Constraint
+     * Manage Place Constraint + Manager Capacity
      * @throws IloException
      */
     private void managePlaceConstraint() throws IloException {
@@ -422,10 +421,13 @@ public class Model {
             IloLinearIntExpr constraint = this.modeler.linearIntExpr();
 
             for (int i = 0; i < this.cfg.getT(); i++) {
-                constraint.addTerm(1, this.zHat[i][j]);
+                constraint.addTerm(
+                        (int) this.cfg.getChains().get(i).getNodes().stream().filter(Types.Type::isManageable).count(),
+                        this.zHat[i][j]);
             }
 
-            this.modeler.addLe(constraint, this.yHat[j], String.format("manage_place_constraint_node{%d}", j));
+            constraint.addTerm(-this.cfg.getVnfmCapacity(), this.yHat[j]);
+            this.modeler.addLe(constraint,0, String.format("manage_place_constraint_node{%d}", j));
         }
     }
 
@@ -491,24 +493,6 @@ public class Model {
             v += this.cfg.getChains().get(h).nodes();
         }
     }
-
-    /**
-     * Manager Capacity Constraint
-     * @throws IloException
-     */
-    private void managerCapacityConstraint() throws IloException {
-        for (int i = 0; i < this.cfg.getW(); i++) {
-            IloLinearIntExpr constraint = this.modeler.linearIntExpr();
-
-            for (int j = 0; j < this.cfg.getT(); j++) {
-                constraint.addTerm(this.cfg.getChains().get(j).nodes(), this.zHat[j][i]);
-            }
-
-            this.modeler.addLe(constraint, this.cfg.getVnfmCapacity(),
-                    String.format("manager_capacity_constraint_%d", i));
-        }
-    }
-
 
     /**
      * Flow conservation
