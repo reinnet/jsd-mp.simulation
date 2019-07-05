@@ -1,0 +1,590 @@
+nodes:
+  - id: core-switch-0
+    cores: 0
+    ram: 0
+    vnfSupport: true
+    notManagerNodes: []
+    egress: true
+    ingress: true
+  - id: core-switch-1
+    cores: 0
+    ram: 0
+    vnfSupport: true
+    notManagerNodes: []
+    egress: true
+    ingress: true
+  - id: core-switch-2
+    cores: 0
+    ram: 0
+    vnfSupport: true
+    notManagerNodes: []
+    egress: true
+    ingress: true
+  - id: core-switch-3
+    cores: 0
+    ram: 0
+    vnfSupport: true
+    notManagerNodes: []
+    egress: true
+    ingress: true
+  - id: aggr-switch-0-0
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: aggr-switch-0-1
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: edge-switch-0-0
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: edge-switch-0-1
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: server-0-0
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-1-0
+      - server-1-1
+      - server-1-2
+      - server-1-3
+      - server-2-0
+      - server-2-1
+      - server-2-2
+      - server-2-3
+      - server-3-0
+      - server-3-1
+      - server-3-2
+      - server-3-3
+    egress: false
+    ingress: false
+  - id: server-0-1
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-1-0
+      - server-1-1
+      - server-1-2
+      - server-1-3
+      - server-2-0
+      - server-2-1
+      - server-2-2
+      - server-2-3
+      - server-3-0
+      - server-3-1
+      - server-3-2
+      - server-3-3
+    egress: false
+    ingress: false
+  - id: server-0-2
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-1-0
+      - server-1-1
+      - server-1-2
+      - server-1-3
+      - server-2-0
+      - server-2-1
+      - server-2-2
+      - server-2-3
+      - server-3-0
+      - server-3-1
+      - server-3-2
+      - server-3-3
+    egress: false
+    ingress: false
+  - id: server-0-3
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-1-0
+      - server-1-1
+      - server-1-2
+      - server-1-3
+      - server-2-0
+      - server-2-1
+      - server-2-2
+      - server-2-3
+      - server-3-0
+      - server-3-1
+      - server-3-2
+      - server-3-3
+    egress: false
+    ingress: false
+  - id: aggr-switch-1-0
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: aggr-switch-1-1
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: edge-switch-1-0
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: edge-switch-1-1
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: server-1-0
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-0-0
+      - server-0-1
+      - server-0-2
+      - server-0-3
+      - server-2-0
+      - server-2-1
+      - server-2-2
+      - server-2-3
+      - server-3-0
+      - server-3-1
+      - server-3-2
+      - server-3-3
+    egress: false
+    ingress: false
+  - id: server-1-1
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-0-0
+      - server-0-1
+      - server-0-2
+      - server-0-3
+      - server-2-0
+      - server-2-1
+      - server-2-2
+      - server-2-3
+      - server-3-0
+      - server-3-1
+      - server-3-2
+      - server-3-3
+    egress: false
+    ingress: false
+  - id: server-1-2
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-0-0
+      - server-0-1
+      - server-0-2
+      - server-0-3
+      - server-2-0
+      - server-2-1
+      - server-2-2
+      - server-2-3
+      - server-3-0
+      - server-3-1
+      - server-3-2
+      - server-3-3
+    egress: false
+    ingress: false
+  - id: server-1-3
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-0-0
+      - server-0-1
+      - server-0-2
+      - server-0-3
+      - server-2-0
+      - server-2-1
+      - server-2-2
+      - server-2-3
+      - server-3-0
+      - server-3-1
+      - server-3-2
+      - server-3-3
+    egress: false
+    ingress: false
+  - id: aggr-switch-2-0
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: aggr-switch-2-1
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: edge-switch-2-0
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: edge-switch-2-1
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: server-2-0
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-0-0
+      - server-0-1
+      - server-0-2
+      - server-0-3
+      - server-1-0
+      - server-1-1
+      - server-1-2
+      - server-1-3
+      - server-3-0
+      - server-3-1
+      - server-3-2
+      - server-3-3
+    egress: false
+    ingress: false
+  - id: server-2-1
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-0-0
+      - server-0-1
+      - server-0-2
+      - server-0-3
+      - server-1-0
+      - server-1-1
+      - server-1-2
+      - server-1-3
+      - server-3-0
+      - server-3-1
+      - server-3-2
+      - server-3-3
+    egress: false
+    ingress: false
+  - id: server-2-2
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-0-0
+      - server-0-1
+      - server-0-2
+      - server-0-3
+      - server-1-0
+      - server-1-1
+      - server-1-2
+      - server-1-3
+      - server-3-0
+      - server-3-1
+      - server-3-2
+      - server-3-3
+    egress: false
+    ingress: false
+  - id: server-2-3
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-0-0
+      - server-0-1
+      - server-0-2
+      - server-0-3
+      - server-1-0
+      - server-1-1
+      - server-1-2
+      - server-1-3
+      - server-3-0
+      - server-3-1
+      - server-3-2
+      - server-3-3
+    egress: false
+    ingress: false
+  - id: aggr-switch-3-0
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: aggr-switch-3-1
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: edge-switch-3-0
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: edge-switch-3-1
+    cores: 0
+    ram: 0
+    vnfSupport: false
+    notManagerNodes: []
+    egress: false
+    ingress: false
+  - id: server-3-0
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-0-0
+      - server-0-1
+      - server-0-2
+      - server-0-3
+      - server-1-0
+      - server-1-1
+      - server-1-2
+      - server-1-3
+      - server-2-0
+      - server-2-1
+      - server-2-2
+      - server-2-3
+    egress: false
+    ingress: false
+  - id: server-3-1
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-0-0
+      - server-0-1
+      - server-0-2
+      - server-0-3
+      - server-1-0
+      - server-1-1
+      - server-1-2
+      - server-1-3
+      - server-2-0
+      - server-2-1
+      - server-2-2
+      - server-2-3
+    egress: false
+    ingress: false
+  - id: server-3-2
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-0-0
+      - server-0-1
+      - server-0-2
+      - server-0-3
+      - server-1-0
+      - server-1-1
+      - server-1-2
+      - server-1-3
+      - server-2-0
+      - server-2-1
+      - server-2-2
+      - server-2-3
+    egress: false
+    ingress: false
+  - id: server-3-3
+    cores: 20
+    ram: 100
+    vnfSupport: true
+    notManagerNodes:
+      - server-0-0
+      - server-0-1
+      - server-0-2
+      - server-0-3
+      - server-1-0
+      - server-1-1
+      - server-1-2
+      - server-1-3
+      - server-2-0
+      - server-2-1
+      - server-2-2
+      - server-2-3
+    egress: false
+    ingress: false
+links:
+  - source: core-switch-0
+    destination: aggr-switch-0-0
+    bandwidth: 40000
+  - source: core-switch-0
+    destination: aggr-switch-1-0
+    bandwidth: 40000
+  - source: core-switch-0
+    destination: aggr-switch-2-0
+    bandwidth: 40000
+  - source: core-switch-0
+    destination: aggr-switch-3-0
+    bandwidth: 40000
+  - source: core-switch-1
+    destination: aggr-switch-0-0
+    bandwidth: 40000
+  - source: core-switch-1
+    destination: aggr-switch-1-0
+    bandwidth: 40000
+  - source: core-switch-1
+    destination: aggr-switch-2-0
+    bandwidth: 40000
+  - source: core-switch-1
+    destination: aggr-switch-3-0
+    bandwidth: 40000
+  - source: core-switch-2
+    destination: aggr-switch-0-1
+    bandwidth: 40000
+  - source: core-switch-2
+    destination: aggr-switch-1-1
+    bandwidth: 40000
+  - source: core-switch-2
+    destination: aggr-switch-2-1
+    bandwidth: 40000
+  - source: core-switch-2
+    destination: aggr-switch-3-1
+    bandwidth: 40000
+  - source: core-switch-3
+    destination: aggr-switch-0-1
+    bandwidth: 40000
+  - source: core-switch-3
+    destination: aggr-switch-1-1
+    bandwidth: 40000
+  - source: core-switch-3
+    destination: aggr-switch-2-1
+    bandwidth: 40000
+  - source: core-switch-3
+    destination: aggr-switch-3-1
+    bandwidth: 40000
+  - source: aggr-switch-0-0
+    destination: edge-switch-0-0
+    bandwidth: 40000
+  - source: aggr-switch-0-0
+    destination: edge-switch-0-1
+    bandwidth: 40000
+  - source: aggr-switch-0-1
+    destination: edge-switch-0-0
+    bandwidth: 40000
+  - source: aggr-switch-0-1
+    destination: edge-switch-0-1
+    bandwidth: 40000
+  - source: edge-switch-0-0
+    destination: server-0-0
+    bandwidth: 40000
+  - source: edge-switch-0-0
+    destination: server-0-1
+    bandwidth: 40000
+  - source: edge-switch-0-1
+    destination: server-0-2
+    bandwidth: 40000
+  - source: edge-switch-0-1
+    destination: server-0-3
+    bandwidth: 40000
+  - source: aggr-switch-1-0
+    destination: edge-switch-1-0
+    bandwidth: 40000
+  - source: aggr-switch-1-0
+    destination: edge-switch-1-1
+    bandwidth: 40000
+  - source: aggr-switch-1-1
+    destination: edge-switch-1-0
+    bandwidth: 40000
+  - source: aggr-switch-1-1
+    destination: edge-switch-1-1
+    bandwidth: 40000
+  - source: edge-switch-1-0
+    destination: server-1-0
+    bandwidth: 40000
+  - source: edge-switch-1-0
+    destination: server-1-1
+    bandwidth: 40000
+  - source: edge-switch-1-1
+    destination: server-1-2
+    bandwidth: 40000
+  - source: edge-switch-1-1
+    destination: server-1-3
+    bandwidth: 40000
+  - source: aggr-switch-2-0
+    destination: edge-switch-2-0
+    bandwidth: 40000
+  - source: aggr-switch-2-0
+    destination: edge-switch-2-1
+    bandwidth: 40000
+  - source: aggr-switch-2-1
+    destination: edge-switch-2-0
+    bandwidth: 40000
+  - source: aggr-switch-2-1
+    destination: edge-switch-2-1
+    bandwidth: 40000
+  - source: edge-switch-2-0
+    destination: server-2-0
+    bandwidth: 40000
+  - source: edge-switch-2-0
+    destination: server-2-1
+    bandwidth: 40000
+  - source: edge-switch-2-1
+    destination: server-2-2
+    bandwidth: 40000
+  - source: edge-switch-2-1
+    destination: server-2-3
+    bandwidth: 40000
+  - source: aggr-switch-3-0
+    destination: edge-switch-3-0
+    bandwidth: 40000
+  - source: aggr-switch-3-0
+    destination: edge-switch-3-1
+    bandwidth: 40000
+  - source: aggr-switch-3-1
+    destination: edge-switch-3-0
+    bandwidth: 40000
+  - source: aggr-switch-3-1
+    destination: edge-switch-3-1
+    bandwidth: 40000
+  - source: edge-switch-3-0
+    destination: server-3-0
+    bandwidth: 40000
+  - source: edge-switch-3-0
+    destination: server-3-1
+    bandwidth: 40000
+  - source: edge-switch-3-1
+    destination: server-3-2
+    bandwidth: 40000
+  - source: edge-switch-3-1
+    destination: server-3-3
+    bandwidth: 40000

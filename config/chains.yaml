@@ -1,0 +1,41 @@
+chains:
+  - cost: 10
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vNAT
+        id: 2
+      - type: egress
+        id: 3
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+  - cost: 10
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: egress
+        id: 3
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
