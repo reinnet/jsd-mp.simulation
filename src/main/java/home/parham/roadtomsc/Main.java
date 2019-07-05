@@ -1,6 +1,8 @@
 package home.parham.roadtomsc;
 
-import com.yacl4j.core.ConfigurationBuilder;
+import home.parham.roadtomsc.config.ChainsConfig;
+import home.parham.roadtomsc.config.TopologyConfig;
+import home.parham.roadtomsc.config.UserConfig;
 import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Link;
 import home.parham.roadtomsc.domain.Node;
@@ -11,7 +13,6 @@ import home.parham.roadtomsc.model.Model;
 import ilog.concert.IloException;
 import ilog.cplex.IloCplex;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -27,7 +28,7 @@ public class Main {
     private final static Logger logger = Logger.getLogger(Main.class.getName());
 
     private static void usage() {
-        System.out.println("roadtomsc /path/to/configuration.yaml");
+        System.out.println("roadtomsc /path/to/configuration/");
     }
 
     public static void main(String[] args) {
@@ -36,10 +37,8 @@ public class Main {
             return;
         }
 
-        // load configuration from file
-        SimulationConfig config = ConfigurationBuilder.newBuilder()
-                .source().fromFile(new File(args[0]))
-                .build(SimulationConfig.class);
+        // load user configuration
+        UserConfig config = UserConfig.load(args[0]);
 
         // build the model configuration from the loaded configuration
 
@@ -54,12 +53,12 @@ public class Main {
         Map<String, Integer> nodes = new HashMap<>();
 
         // physical nodes {{{
-        for (int i = 0; i < config.getNodes().size(); i++) {
-            nodes.put(config.getNodes().get(i).getID(), i);
+        for (int i = 0; i < config.getTopology().getNodes().size(); i++) {
+            nodes.put(config.getTopology().getNodes().get(i).getID(), i);
         }
 
-        for (int i = 0; i < config.getNodes().size(); i++) {
-            SimulationConfig.NodeConfig nodeConfig = config.getNodes().get(i);
+        for (int i = 0; i < config.getTopology().getNodes().size(); i++) {
+            TopologyConfig.NodeConfig nodeConfig = config.getTopology().getNodes().get(i);
             Node node = new Node(
                     nodeConfig.getID(),
                     nodeConfig.getCores(),
@@ -75,7 +74,7 @@ public class Main {
         // }}}
 
         // physical links {{{
-        config.getLinks().forEach(linkConfig -> {
+        config.getTopology().getLinks().forEach(linkConfig -> {
             Link l1 = new Link(
                     linkConfig.getBandwidth(),
                     nodes.get(linkConfig.getSource()),
@@ -100,7 +99,7 @@ public class Main {
 
 
         // VNF types {{{
-        config.getTypes().forEach(typeConfig -> {
+        config.getTypes().getTypes().forEach(typeConfig -> {
             Types.add(typeConfig.getCores(), typeConfig.getRam(),typeConfig.getEgress(),
                     typeConfig.getIngress(), typeConfig.getManageable());
             types.put(typeConfig.getName(), Types.len() - 1);
@@ -116,13 +115,13 @@ public class Main {
 
         // SFC requests {{{
         // consider to create requests after creating VNF types
-        config.getChains().forEach(chainConfig -> {
+        config.getChains().getChains().forEach(chainConfig -> {
             Chain chain = new Chain(chainConfig.getCost());
 
             Map<String, Integer> vNodes = new HashMap<>();
 
             for (int i = 0; i < chainConfig.getNodes().size(); i++) {
-                SimulationConfig.ChainConfig.NodeConfig n = chainConfig.getNodes().get(i);
+                ChainsConfig.ChainConfig.NodeConfig n = chainConfig.getNodes().get(i);
                 chain.addNode(types.get(n.getType()));
                 vNodes.put(n.getID(), i);
             }
