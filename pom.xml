@@ -23,11 +23,11 @@
     <dependencies>
         <!-- https://mvnrepository.com/artifact/cplex/cplex -->
         <dependency>
-            <groupId>cplex</groupId>
+            <groupId>ibm</groupId>
             <artifactId>cplex</artifactId>
             <version>12.8</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/cplex.jar</systemPath>
+	    <systemPath>${basedir}/cplex.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.github.fabriziocucci</groupId>
@@ -62,7 +62,26 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
+            <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>home.parham.roadtomsc.Main</mainClass>
+          <arguments>
+            <argument>config</argument>
+          </arguments>
+          <classpathScope>compile</classpathScope>
+        </configuration>
+      </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
