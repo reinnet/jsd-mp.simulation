@@ -8,9 +8,13 @@ in a data center. Results are placed in the results folder along with their conf
 
 ## Up and Running
 
-For running simulation, you need a working installation of CPLEX on your system
-then you can run the simulation with the following java option:
+For running simulation, you need a working installation of CPLEX and Java/Maven on your system
+then you can run the simulation with the following command:
 
-```
-"-Djava.library.path=$USER_HOME$/Application/CPLEX_Studio-Community128/cplex/bin/x86-64_linux"
+```sh
+cd simulation
+CPLEX_LIB="$HOME/ibm/ILOG/CPLEX_Studio128/cplex/bin/x86-64_linux"
+mvn install
+sed -i "s#path=.*#path=${CPLEX_LIB}#g" .mvn/jvm.config
+mvn exec:java
 ```
