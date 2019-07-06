@@ -18,3 +18,30 @@ mvn install
 sed -i "s#path=.*#path=${CPLEX_LIB}#g" .mvn/jvm.config
 mvn exec:java
 ```
+
+## Results
+There are the reults of using this simulation for solving the real problem of placing the NFV chains on k-ary fat tree.
+
+> 4 vCPU, 16GB of RAM, without GC limit, 12GB heap size, 8 chains
+
+| k-ary fat tree | time     |
+|----------------|----------|
+| 6              | 4 sec    |
+| 8              | 7 sec    |
+| 10             | 1 min    |
+| 12             | 5:20 min |
+
+> 4 vCPU, 16GB of RAM, without GC limit, 12GB heap size, 12-ary fat tree
+
+| chains | time         |
+|--------|--------------|
+| 8      | 5:20 min     |
+| 10     | 7:06 min     |
+| 11     | 16:33 min    |
+| 12     | OOM Killed   |
+
+> 8 vCPU, 22GB of RAM, without GC limit, 12GB heap size, 12-ary fat tree
+
+| chains | time         |
+|--------|--------------|
+| 12     | 14:53 min    |
