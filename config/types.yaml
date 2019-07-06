@@ -21,3 +21,7 @@ types:
     cores: 2
     ram: 2
     manageable: true
+  - name: vDPI
+    cores: 2
+    ram: 4
+    manageable: true
