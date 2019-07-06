@@ -39,3 +39,36 @@ chains:
       - source: 2
         destination: 3
         bandwidth: 250
+  - cost: 20
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vDPI
+        id: 2
+      - type: vDPI
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: egress
+        id: 5
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 125
+      - source: 1
+        destination: 3
+        bandwidth: 125
+      - source: 2
+        destination: 4
+        bandwidth: 125
+      - source: 3
+        destination: 4
+        bandwidth: 125
+      - source: 4
+        destination: 5
+        bandwidth: 250
