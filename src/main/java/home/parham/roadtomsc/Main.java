@@ -47,7 +47,8 @@ public class Main {
                 .vnfmCores(config.getVNFM().getCores())
                 .vnfmCapacity(config.getVNFM().getCapacity())
                 .vnfmRadius(config.getVNFM().getRadius())
-                .vnfmBandwidth(config.getVNFM().getBandwidth());
+                .vnfmBandwidth(config.getVNFM().getBandwidth())
+                .vnfmLicenseFee(config.getVNFM().getLicenseFee());
 
         // current mapping between node identification and their index in model
         Map<String, Integer> nodes = new HashMap<>();

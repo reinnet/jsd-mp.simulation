@@ -62,7 +62,7 @@ public class Config {
     /**
      * VNFMs parameters
      */
-    private int vnfmRam, vnfmCores, vnfmCapacity, vnfmRadius, vnfmBandwidth;
+    private int vnfmRam, vnfmCores, vnfmCapacity, vnfmRadius, vnfmBandwidth, vnfmLicenseFee;
 
     Config(
             List<Node> nodes,
@@ -78,7 +78,8 @@ public class Config {
             int vnfmCores,
             int vnfmCapacity,
             int vnfmRadius,
-            int vnfmBandwidth
+            int vnfmBandwidth,
+            int vnfmLicenseFee
     ) {
         this.nodes = nodes;
         W = w;
@@ -94,6 +95,7 @@ public class Config {
         this.vnfmCapacity = vnfmCapacity;
         this.vnfmRadius = vnfmRadius;
         this.vnfmBandwidth = vnfmBandwidth;
+        this.vnfmLicenseFee = vnfmLicenseFee;
     }
 
     public List<Node> getNodes() {
@@ -150,5 +152,9 @@ public class Config {
 
     public int getVnfmBandwidth() {
         return vnfmBandwidth;
+    }
+
+    public int getVnfmLicenseFee() {
+        return vnfmLicenseFee;
     }
 }

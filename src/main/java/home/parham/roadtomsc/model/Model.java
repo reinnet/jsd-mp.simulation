@@ -234,6 +234,9 @@ public class Model {
         for (int i = 0; i < this.cfg.getT(); i++) {
             expr.addTerm(this.cfg.getChains().get(i).getCost(), this.x[i]);
         }
+        for (int i = 0; i < this.cfg.getW(); i++) {
+            expr.addTerm(-this.cfg.getVnfmLicenseFee(), this.yHat[i]);
+        }
         this.modeler.addMaximize(expr);
 
         return this;

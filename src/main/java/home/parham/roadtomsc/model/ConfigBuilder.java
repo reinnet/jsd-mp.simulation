@@ -39,7 +39,7 @@ public class ConfigBuilder {
     /**
      * VNFMs parameters
      */
-    private int vnfmRam, vnfmCores, vnfmCapacity, vnfmRadius, vnfmBandwidth;
+    private int vnfmRam, vnfmCores, vnfmCapacity, vnfmRadius, vnfmBandwidth, vnfmLicenseFee;
 
     public ConfigBuilder vnfmRam(int vnfmRam) {
         this.vnfmRam = vnfmRam;
@@ -66,8 +66,14 @@ public class ConfigBuilder {
         return this;
     }
 
-        /**
+    public ConfigBuilder vnfmLicenseFee(int vnfmLicenseFee) {
+        this.vnfmLicenseFee = vnfmLicenseFee;
+        return this;
+    }
+
+    /**
      * Adds physical link to network topology
+     *
      * @param link: physical link
      */
     public ConfigBuilder addLink(Link link) {
@@ -75,8 +81,9 @@ public class ConfigBuilder {
         return this;
     }
 
-        /**
+    /**
      * Adds chain to SFC request collection, note that our problem is offline
+     *
      * @param chain: SFC request
      */
     public ConfigBuilder addChain(Chain chain) {
@@ -86,6 +93,7 @@ public class ConfigBuilder {
 
     /**
      * Adds physical node to network topology
+     *
      * @param node: physical node
      */
     public ConfigBuilder addNode(Node node) {
@@ -138,7 +146,8 @@ public class ConfigBuilder {
                 this.vnfmCores,
                 this.vnfmCapacity,
                 this.vnfmRadius,
-                this.vnfmBandwidth
+                this.vnfmBandwidth,
+                this.vnfmLicenseFee
         );
     }
 

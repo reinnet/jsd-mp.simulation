@@ -19,4 +19,5 @@ public interface VNFMConfig {
     int getCapacity();
     int getRadius();
     int getBandwidth();
+    int getLicenseFee();
 }
