@@ -21,6 +21,7 @@ mvn exec:java
 
 ## Results
 There are the reults of using this simulation for solving the real problem of placing the NFV chains on k-ary fat tree.
+In these results there is no constraint on license fee of VNFMs.
 
 > 4 vCPU, 16GB of RAM, without GC limit, 12GB heap size, 8 chains
 
