@@ -492,3 +492,989 @@ chains:
       - source: 8
         destination: 9
         bandwidth: 250
+  - cost: 10
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vNAT
+        id: 2
+      - type: egress
+        id: 3
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+  - cost: 10
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: egress
+        id: 3
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+  - cost: 20
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vDPI
+        id: 2
+      - type: vDPI
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: egress
+        id: 5
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 125
+      - source: 1
+        destination: 3
+        bandwidth: 125
+      - source: 2
+        destination: 4
+        bandwidth: 125
+      - source: 3
+        destination: 4
+        bandwidth: 125
+      - source: 4
+        destination: 5
+        bandwidth: 250
+  - cost: 50
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 10
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 10
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 10
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vNAT
+        id: 2
+      - type: egress
+        id: 3
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+  - cost: 50
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 25
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 5
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 1
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 5
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 10
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vNAT
+        id: 2
+      - type: egress
+        id: 3
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+  - cost: 10
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: egress
+        id: 3
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+  - cost: 20
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vDPI
+        id: 2
+      - type: vDPI
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: egress
+        id: 5
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 125
+      - source: 1
+        destination: 3
+        bandwidth: 125
+      - source: 2
+        destination: 4
+        bandwidth: 125
+      - source: 3
+        destination: 4
+        bandwidth: 125
+      - source: 4
+        destination: 5
+        bandwidth: 250
+  - cost: 50
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 10
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 10
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 10
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vNAT
+        id: 2
+      - type: egress
+        id: 3
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+  - cost: 50
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 25
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 5
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 1
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
+  - cost: 5
+    nodes:
+      - type: ingress
+        id: 0
+      - type: vFW
+        id: 1
+      - type: vIDS
+        id: 2
+      - type: vIDS
+        id: 3
+      - type: vIDS
+        id: 4
+      - type: vDPI
+        id: 5
+      - type: vDPI
+        id: 6
+      - type: vDPI
+        id: 7
+      - type: vNAT
+        id: 8
+      - type: egress
+        id: 9
+    links:
+      - source: 0
+        destination: 1
+        bandwidth: 250
+      - source: 1
+        destination: 2
+        bandwidth: 250
+      - source: 2
+        destination: 3
+        bandwidth: 250
+      - source: 3
+        destination: 4
+        bandwidth: 250
+      - source: 4
+        destination: 5
+        bandwidth: 250
+      - source: 5
+        destination: 6
+        bandwidth: 250
+      - source: 6
+        destination: 7
+        bandwidth: 250
+      - source: 7
+        destination: 8
+        bandwidth: 250
+      - source: 8
+        destination: 9
+        bandwidth: 250
