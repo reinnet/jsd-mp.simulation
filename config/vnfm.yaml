@@ -3,3 +3,4 @@ cores: 2
 capacity: 5
 radius: 5
 bandwidth: 1
+licenseFee: 10
