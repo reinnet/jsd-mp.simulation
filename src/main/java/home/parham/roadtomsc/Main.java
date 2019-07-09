@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -157,7 +159,13 @@ public class Main {
 
             cplex.exportModel("simulation.lp");
 
-            if (cplex.solve()) {
+            cplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
+
+            Instant now = Instant.now();
+            boolean solved = cplex.solve();
+            System.out.printf("Problem solved in %s\n", Duration.between(now, Instant.now()));
+
+            if (solved) {
                 writer.println();
                 writer.println(" Solution Status = " + cplex.getStatus());
                 writer.println();
