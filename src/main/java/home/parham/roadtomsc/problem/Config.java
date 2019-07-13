@@ -1,4 +1,4 @@
-package home.parham.roadtomsc.model;
+package home.parham.roadtomsc.problem;
 
 import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Link;
