@@ -2,6 +2,7 @@ package home.parham.roadtomsc.model;
 
 import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Types;
+import home.parham.roadtomsc.problem.Config;
 import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
 import ilog.concert.IloLinearIntExpr;
@@ -10,7 +11,7 @@ import ilog.concert.IloModeler;
 
 /**
  * Model creates variables, objective and constraints of mathematical
- * model of our problem.
+ * model of our problem in CPLEX.
  */
 public class Model {
     /**
