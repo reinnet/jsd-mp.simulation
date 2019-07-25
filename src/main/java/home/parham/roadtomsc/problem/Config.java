@@ -157,4 +157,17 @@ public class Config {
     public int getVnfmLicenseFee() {
         return vnfmLicenseFee;
     }
+
+    /**
+     * @param name of the target node
+     * @return index of a first node that has the given name otherwise -1
+     */
+    public int getNodeIndex(String name) {
+        for (int i = 0; i < this.nodes.size(); i++)  {
+            if (this.nodes.get(i).getName() == name) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
