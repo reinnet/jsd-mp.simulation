@@ -13,6 +13,20 @@ public class Node {
     private String name;
 
     /**
+     * @param cores is set as new amount of cores of the node
+     */
+    public void setCores(int cores) {
+        this.cores = cores;
+    }
+
+    /**
+     * @param ram is set as new amount of ram of the node
+     */
+    public void setRam(int ram) {
+        this.ram = ram;
+    }
+
+    /**
      * cores indicate number of CPU cores
      */
     private int cores;
