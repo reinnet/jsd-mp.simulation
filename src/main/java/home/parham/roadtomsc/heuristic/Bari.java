@@ -17,6 +17,7 @@ import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Node;
 import home.parham.roadtomsc.domain.Types;
 import home.parham.roadtomsc.problem.Config;
+import javafx.util.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,7 +31,10 @@ public class Bari {
         this.placement = new ArrayList<>();
     }
 
-    // place places the given chain with Bari algorithm
+    /**
+     * place places the given chain with Bari algorithm
+     * @param index of the given chain in configuration
+     */
     public void place(int index) {
         Chain chain = this.cfg.getChains().get(index);
         // chain placement array that maps each vnf to its physical node
@@ -55,13 +59,39 @@ public class Bari {
 
             if (stage > 1) { // use bfs from the last placed node
                 int selectedNode = placement.get(stage - 1);
+                this.bfs(selectedNode, scores);
             }
-            int bestNode;
+            Optional<Map.Entry<Integer, Integer>> op = scores.entrySet().stream().min(Comparator.comparingInt(Map.Entry::getValue));
+            if (!op.isPresent()) {
+                // there is no way to place the given chain
+                this.placement.add(null);
+                return;
+            }
+            int bestNode = op.get().getKey();
             // select a physical node with minimum cost
             placement.add(bestNode);
         }
 
-
         this.placement.add(placement);
+    }
+
+    /**
+     * @param root is the source of BFS that has depth 0
+     * @param scores is the map that will be filled by the distance between root and its keys
+     */
+    private void bfs(int root, Map<Integer, Integer> scores) {
+        Queue<Pair<Integer, Integer>> q = new LinkedList<>();
+        q.add(new Pair<>(root, 0));
+
+        while (!q.isEmpty()) {
+            Pair<Integer, Integer> p = q.peek();
+            int source = p.getKey();
+            int depth = p.getValue();
+            scores.computeIfPresent(source, (node, score) -> depth);
+
+            this.cfg.getLinks().stream()
+                    .filter(l -> l.getSource() == source)
+                    .forEach(l -> q.add(new Pair<>(l.getDestination(), depth+1)));
+        }
     }
 }
