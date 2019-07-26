@@ -13,7 +13,6 @@
 
 package home.parham.roadtomsc.heuristic;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Node;
 import home.parham.roadtomsc.domain.Types;
@@ -21,24 +20,30 @@ import home.parham.roadtomsc.problem.Config;
 import javafx.util.Pair;
 
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class Bari {
+    private final static Logger logger = Logger.getLogger(Bari.class.getName());
+
     private Config cfg;
-
-    public List<List<Integer>> getPlacement() {
-        return Collections.unmodifiableList(
-                this.placement.stream().map(Collections::unmodifiableList).collect(Collectors.toList())
-        );
-    }
-
     private ArrayList<ArrayList<Integer>> placement;
 
     public Bari(Config cfg) {
         this.cfg = cfg;
         this.placement = new ArrayList<>();
+    }
 
+
+    /**
+     * solve the problem and then return the placement
+     */
+    public List<List<Integer>> solve() {
         this.cfg.getChains().forEach(this::place);
+
+        return Collections.unmodifiableList(
+                this.placement.stream().map(Collections::unmodifiableList).collect(Collectors.toList())
+        );
     }
 
     /**
@@ -46,14 +51,14 @@ public class Bari {
      * @param chain for placement
      */
     private void place(Chain chain) {
-        System.out.printf(">> place chain with %d nodes\n", chain.nodes());
+        logger.info(String.format(" -- * chain with %d nodes * -- ", chain.nodes()));
 
         // chain placement array that maps each vnf to its physical node
         ArrayList<Integer> placement = new ArrayList<>();
 
         // each node represents the stage in Bari multi-stage graph
         for (int stage = 0; stage < chain.nodes() - 1; stage++) {
-            System.out.printf(">> stage (%d)\n", stage);
+            logger.info(String.format(" -- stage (%d) -- ", stage));
             final Types.Type t = chain.getNode(stage);
 
             // list the available nodes
@@ -61,8 +66,9 @@ public class Bari {
                     .filter(node -> !t.isIngress() || node.isIngress()) // ingress
                     .filter(node -> node.getCores() >= t.getCores()) // number of cores
                     .filter(node -> node.getRam() >= t.getRam()) // amount of ram
-                    .filter(node -> !t.isIngress() || node.isEgress()) // egress
+                    .filter(node -> !t.isEgress() || node.isEgress()) // egress
                     .collect(Collectors.toList());
+            nodes.forEach(n -> System.out.println(n.getName()));
             // provide a simple integer as score for each node
             Map<Integer, Integer> scores = nodes.stream().collect(Collectors.toMap(
                     n -> this.cfg.getNodeIndex(n.getName()),
@@ -80,9 +86,12 @@ public class Bari {
                 return;
             }
             int bestNode = op.get().getKey();
+            logger.info(String.format("best node: %d", bestNode));
             // select a physical node with minimum cost
             placement.add(bestNode);
         }
+
+        // place the VNFM in last stage
 
         this.placement.add(placement);
     }
@@ -102,7 +111,7 @@ public class Bari {
             int source = p.getKey();
             int depth = p.getValue();
 
-            if (!seen.getOrDefault(source, false))
+            if (seen.getOrDefault(source, false))
                 continue;
 
             scores.computeIfPresent(source, (node, score) -> depth);
