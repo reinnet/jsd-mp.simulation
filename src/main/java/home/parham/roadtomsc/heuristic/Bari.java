@@ -27,11 +27,16 @@ public class Bari {
     private final static Logger logger = Logger.getLogger(Bari.class.getName());
 
     private Config cfg;
+    /**
+     * This is a copy from nodes of configuration object. This will be modified during the process of selection.
+     */
+    private List<Node> nodes;
     private ArrayList<ArrayList<Integer>> placement;
 
     public Bari(Config cfg) {
         this.cfg = cfg;
         this.placement = new ArrayList<>();
+        this.nodes = new ArrayList<>(this.cfg.getNodes());
     }
 
 
@@ -42,7 +47,7 @@ public class Bari {
         this.cfg.getChains().forEach(this::place);
 
         return Collections.unmodifiableList(
-                this.placement.stream().map(Collections::unmodifiableList).collect(Collectors.toList())
+                this.placement.stream().map(a -> a != null ? Collections.unmodifiableList(a) : null).collect(Collectors.toList())
         );
     }
 
@@ -62,13 +67,14 @@ public class Bari {
             final Types.Type t = chain.getNode(stage);
 
             // list the available nodes
-            List<Node> nodes = this.cfg.getNodes().stream()
+            List<Node> nodes = this.nodes.stream()
                     .filter(node -> !t.isIngress() || node.isIngress()) // ingress
                     .filter(node -> node.getCores() >= t.getCores()) // number of cores
                     .filter(node -> node.getRam() >= t.getRam()) // amount of ram
                     .filter(node -> !t.isEgress() || node.isEgress()) // egress
                     .collect(Collectors.toList());
-            nodes.forEach(n -> System.out.println(n.getName()));
+            logger.info("selected nodes:");
+            nodes.forEach(n -> logger.info(n.getName()));
             // provide a simple integer as score for each node
             Map<Integer, Integer> scores = nodes.stream().collect(Collectors.toMap(
                     n -> this.cfg.getNodeIndex(n.getName()),
@@ -85,9 +91,15 @@ public class Bari {
                 this.placement.add(null);
                 return;
             }
+
+            // select a physical node with minimum cost
             int bestNode = op.get().getKey();
             logger.info(String.format("best node: %d", bestNode));
-            // select a physical node with minimum cost
+
+            Node n = this.nodes.get(bestNode);
+            n.setCores(n.getCores() - t.getCores());
+            n.setRam(n.getRam() - t.getRam());
+
             placement.add(bestNode);
         }
 
