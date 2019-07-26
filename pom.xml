@@ -36,15 +36,6 @@
         </dependency>
     </dependencies>
 
-    <!--
-    <repositories>
-        <repository>
-            <id>jena-bio-libs-release-oss</id>
-            <url>https://bio.informatik.uni-jena.de/repository/libs-release-oss/</url>
-        </repository>
-    </repositories>
-    -->
-
     <build>
         <pluginManagement>
             <plugins>
