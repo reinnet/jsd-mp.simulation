@@ -14,9 +14,10 @@ then you can run the simulation with the following command:
 ```sh
 cd simulation
 CPLEX_LIB="$HOME/ibm/ILOG/CPLEX_Studio128/cplex/bin/x86-64_linux"
-mvn install
-sed -i "s#path=.*#path=${CPLEX_LIB}#g" .mvn/jvm.config
-mvn exec:java
+test -f cplex.jar || echo "Please provide 'cplex.jar' in the current directory"
+gradle build
+sed -i "s#cplexLibrary =.*#cplexLibrary = ${CPLEX_LIB}#g" build.gradle
+gradle run --args config
 ```
 
 ## Results
