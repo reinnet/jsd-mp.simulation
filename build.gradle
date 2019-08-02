@@ -23,6 +23,7 @@ version = '1.2-SNAPSHOT'
 sourceCompatibility = '8'
 
 def mainClass = 'home.parham.roadtomsc.Main'
+def cplexLibrary = '/home/parham/ibm/ILOG/CPLEX_Studio128/cplex/bin/x86-64_linux'
 
 jar {
     manifest {
@@ -32,5 +33,5 @@ jar {
 
 application {
     mainClassName = mainClass
-    applicationDefaultJvmArgs = [ '-XX:-UseGCOverheadLimit', '-Xmx12000M', '-Djava.library.path=/home/parham/ibm/ILOG/CPLEX_Studio128/cplex/bin/x86-64_linux' ]
+    applicationDefaultJvmArgs = [ '-XX:-UseGCOverheadLimit', '-Xmx12000M', "-Djava.library.path=$cplexLibrary" ]
 }
