@@ -17,7 +17,6 @@ import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Node;
 import home.parham.roadtomsc.domain.Types;
 import home.parham.roadtomsc.problem.Config;
-import javafx.util.Pair;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -113,15 +112,16 @@ public class Bari {
      * @param scores is the map that will be filled by the distance between root and its keys
      */
     private void bfs(int root, Map<Integer, Integer> scores) {
-        Queue<Pair<Integer, Integer>> q = new LinkedList<>();
+        Queue<Integer> q = new LinkedList<>();
+        Queue<Integer> s = new LinkedList<>();
         Map<Integer, Boolean> seen = new HashMap<>();
 
-        q.add(new Pair<>(root, 0));
+        q.add(root);
+        s.add(0);
 
         while (!q.isEmpty()) {
-            Pair<Integer, Integer> p = q.remove();
-            int source = p.getKey();
-            int depth = p.getValue();
+            int source = q.remove();
+            int depth = s.remove();
 
             if (seen.getOrDefault(source, false))
                 continue;
@@ -131,7 +131,10 @@ public class Bari {
 
             this.cfg.getLinks().stream()
                     .filter(l -> l.getSource() == source)
-                    .forEach(l -> q.add(new Pair<>(l.getDestination(), depth+1)));
+                    .forEach(l -> {
+                            q.add(l.getDestination());
+                            s.add(depth+1);
+                    });
         }
     }
 }
