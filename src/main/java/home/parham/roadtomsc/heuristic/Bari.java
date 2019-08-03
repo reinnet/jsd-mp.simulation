@@ -14,6 +14,7 @@
 package home.parham.roadtomsc.heuristic;
 
 import home.parham.roadtomsc.domain.Chain;
+import home.parham.roadtomsc.domain.Link;
 import home.parham.roadtomsc.domain.Node;
 import home.parham.roadtomsc.domain.Types;
 import home.parham.roadtomsc.problem.Config;
@@ -30,12 +31,18 @@ public class Bari {
      * This is a copy from nodes of configuration object. This will be modified during the process of selection.
      */
     private List<Node> nodes;
+    /**
+     * This is a copy from links of configuration object. This will be modified during the process of selection.
+     */
+    private List<Link> links;
+
     private ArrayList<ArrayList<Integer>> placement;
 
     public Bari(Config cfg) {
         this.cfg = cfg;
         this.placement = new ArrayList<>();
         this.nodes = new ArrayList<>(this.cfg.getNodes());
+        this.links = new ArrayList<>(this.cfg.getLinks());
     }
 
 
@@ -121,10 +128,12 @@ public class Bari {
                 n.setRam(n.getRam() - t.getRam());
 
                 placement.add(bestNode);
+            } else {
+                feasibleNodes.add(currentFeasibleNodes);
             }
         }
 
-        // place the VNFM in last stage
+        // TODO: place the VNFM in last stage
 
         this.placement.add(placement);
     }
