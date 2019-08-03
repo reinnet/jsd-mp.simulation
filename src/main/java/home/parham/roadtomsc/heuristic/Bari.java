@@ -60,46 +60,68 @@ public class Bari {
         // chain placement array that maps each vnf to its physical node
         ArrayList<Integer> placement = new ArrayList<>();
 
-        // each node represents the stage in Bari multi-stage graph
+        // List of the feasible's nodes in each stage
+        List<List<Node>> feasibleNodes = new ArrayList<>();
+
+        // each node represents the stage in Bari multi-stage graph,
+        // in each stage a node selected for previous stage and each stage
+        // represents a chain's node.
         for (int stage = 0; stage < chain.nodes() - 1; stage++) {
             logger.info(String.format(" -- stage (%d) -- ", stage));
             final Types.Type t = chain.getNode(stage);
 
             // list the available nodes
-            List<Node> nodes = this.nodes.stream()
+            List<Node> currentFeasibleNodes = this.nodes.stream()
                     .filter(node -> !t.isIngress() || node.isIngress()) // ingress
                     .filter(node -> node.getCores() >= t.getCores()) // number of cores
                     .filter(node -> node.getRam() >= t.getRam()) // amount of ram
                     .filter(node -> !t.isEgress() || node.isEgress()) // egress
                     .collect(Collectors.toList());
-            logger.info("selected nodes:");
-            nodes.forEach(n -> logger.info(n.getName()));
-            // provide a simple integer as score for each node
-            Map<Integer, Integer> scores = nodes.stream().collect(Collectors.toMap(
-                    n -> this.cfg.getNodeIndex(n.getName()),
-                    n -> 0
-            ));
+            logger.info("current feasible nodes:");
+            currentFeasibleNodes.forEach(n -> logger.info(n.getName()));
 
-            if (stage > 0) { // use bfs from the last placed node
-                int selectedNode = placement.get(stage - 1);
-                this.bfs(selectedNode, scores);
+            if (stage > 0) {
+                // provide a boolean that indicates reachability for each node from the previous stage
+                // here we select a node for previous stage that has more reachability in current stage
+                // by this metric we have more choice in the next stage but there is no guarantee for that
+                List<Node> previousStageNodes = feasibleNodes.get(stage - 1);
+                List<Map<Integer, Boolean>> previousStageNodesBFSResults = new ArrayList<>();
+                previousStageNodes.forEach(node -> {
+                    Map<Integer, Boolean> reachability = currentFeasibleNodes.stream().collect(Collectors.toMap(
+                            n -> this.cfg.getNodeIndex(n.getName()),
+                            n -> false
+                    ));
+                    this.bfs(this.cfg.getNodeIndex(node.getName()), reachability);
+                    previousStageNodesBFSResults.add(reachability);
+                });
+
+                // find the node from the previous stage that has maximum routes to current stage feasible nodes
+                Optional<Map<Integer, Boolean>> op = previousStageNodesBFSResults.stream()
+                        .max(Comparator.comparingInt(
+                                result -> result.values().stream().reduce(0, (subtotal, value) -> subtotal + (value ? 1 : 0), Integer::sum)
+                        ));
+
+                if (!op.isPresent()) {
+                    // there is no way to place the given chain
+                    this.placement.add(null);
+                    return;
+                }
+
+                // current stage feasible nodes are the nodes that are reachable from the selected node of the previous stage
+                feasibleNodes.add(
+                        op.get().entrySet().stream().filter(Map.Entry::getValue).map(e -> this.nodes.get(e.getKey())).collect(Collectors.toList())
+                );
+
+                // select a physical node with maximum reachable nodes
+                int bestNode = previousStageNodesBFSResults.indexOf(op.get());
+                logger.info(String.format("best node: %d", bestNode));
+
+                Node n = this.nodes.get(bestNode);
+                n.setCores(n.getCores() - t.getCores());
+                n.setRam(n.getRam() - t.getRam());
+
+                placement.add(bestNode);
             }
-            Optional<Map.Entry<Integer, Integer>> op = scores.entrySet().stream().min(Comparator.comparingInt(Map.Entry::getValue));
-            if (!op.isPresent()) {
-                // there is no way to place the given chain
-                this.placement.add(null);
-                return;
-            }
-
-            // select a physical node with minimum cost
-            int bestNode = op.get().getKey();
-            logger.info(String.format("best node: %d", bestNode));
-
-            Node n = this.nodes.get(bestNode);
-            n.setCores(n.getCores() - t.getCores());
-            n.setRam(n.getRam() - t.getRam());
-
-            placement.add(bestNode);
         }
 
         // place the VNFM in last stage
@@ -109,11 +131,10 @@ public class Bari {
 
     /**
      * @param root is the source of BFS that has depth 0
-     * @param scores is the map that will be filled by the distance between root and its keys
+     * @param reachability is the map that will be filled by true when the node is reachable from the source
      */
-    private void bfs(int root, Map<Integer, Integer> scores) {
+    private void bfs(int root, Map<Integer, Boolean> reachability) {
         Queue<Integer> q = new LinkedList<>();
-        Queue<Integer> s = new LinkedList<>();
         Map<Integer, Boolean> seen = new HashMap<>();
 
         q.add(root);
@@ -121,20 +142,17 @@ public class Bari {
 
         while (!q.isEmpty()) {
             int source = q.remove();
-            int depth = s.remove();
 
             if (seen.getOrDefault(source, false))
                 continue;
 
-            scores.computeIfPresent(source, (node, score) -> depth);
+            reachability.computeIfPresent(source, (node, reachable) -> true);
             seen.put(source, true);
 
+            // TODO: check the link bandwidth here
             this.cfg.getLinks().stream()
                     .filter(l -> l.getSource() == source)
-                    .forEach(l -> {
-                            q.add(l.getDestination());
-                            s.add(depth+1);
-                    });
+                    .forEach(l -> q.add(l.getDestination()));
         }
     }
 }
