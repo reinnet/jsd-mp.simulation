@@ -138,7 +138,6 @@ public class Bari {
         Map<Integer, Boolean> seen = new HashMap<>();
 
         q.add(root);
-        s.add(0);
 
         while (!q.isEmpty()) {
             int source = q.remove();
