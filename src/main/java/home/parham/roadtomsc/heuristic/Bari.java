@@ -93,12 +93,14 @@ public class Bari {
                 // by this metric we have more choice in the next stage but there is no guarantee for that
                 List<Node> previousStageNodes = feasibleNodes.get(stage - 1);
                 List<Map<Integer, Boolean>> previousStageNodesBFSResults = new ArrayList<>();
+                // here we assume chains has the linear format
+                int bandwidth = chain.getLink(stage - 1).getBandwidth();
                 previousStageNodes.forEach(node -> {
                     Map<Integer, Boolean> reachability = currentFeasibleNodes.stream().collect(Collectors.toMap(
                             n -> this.cfg.getNodeIndex(n.getName()),
                             n -> false
                     ));
-                    this.bfs(this.cfg.getNodeIndex(node.getName()), reachability);
+                    this.bfs(this.cfg.getNodeIndex(node.getName()), reachability, bandwidth);
                     previousStageNodesBFSResults.add(reachability);
                 });
 
@@ -142,7 +144,7 @@ public class Bari {
      * @param root is the source of BFS that has depth 0
      * @param reachability is the map that will be filled by true when the node is reachable from the source
      */
-    private void bfs(int root, Map<Integer, Boolean> reachability) {
+    private void bfs(int root, Map<Integer, Boolean> reachability, int bandwidth) {
         Queue<Integer> q = new LinkedList<>();
         Map<Integer, Boolean> seen = new HashMap<>();
 
@@ -160,6 +162,7 @@ public class Bari {
             // TODO: check the link bandwidth here
             this.cfg.getLinks().stream()
                     .filter(l -> l.getSource() == source)
+                    .filter(l -> l.getBandwidth() > bandwidth)
                     .forEach(l -> q.add(l.getDestination()));
         }
     }
