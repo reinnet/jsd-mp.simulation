@@ -73,7 +73,7 @@ public class Bari {
         // each node represents the stage in Bari multi-stage graph,
         // in each stage a node selected for previous stage and each stage
         // represents a chain's node.
-        for (int stage = 0; stage < chain.nodes() - 1; stage++) {
+        for (int stage = 0; stage < chain.nodes(); stage++) {
             logger.info(String.format(" -- stage (%d) -- ", stage));
             final Types.Type t = chain.getNode(stage);
 
@@ -84,8 +84,12 @@ public class Bari {
                     .filter(node -> node.getRam() >= t.getRam()) // amount of ram
                     .filter(node -> !t.isEgress() || node.isEgress()) // egress
                     .collect(Collectors.toList());
-            logger.info("current feasible nodes:");
-            currentFeasibleNodes.forEach(n -> logger.info(n.getName()));
+            logger.info("current feasible nodes: " + Arrays.toString(currentFeasibleNodes.stream().map(Node::getName).toArray()));
+
+            if (currentFeasibleNodes.size() == 0) {
+                this.placement.add(null);
+                return;
+            }
 
             if (stage > 0) {
                 // provide a boolean that indicates reachability for each node from the previous stage
@@ -123,15 +127,24 @@ public class Bari {
 
                 // select a physical node with maximum reachable nodes
                 int bestNode = previousStageNodesBFSResults.indexOf(op.get());
-                logger.info(String.format("best node: %d", bestNode));
 
-                Node n = this.nodes.get(bestNode);
+                Node n = previousStageNodes.get(bestNode);
+                logger.info(String.format("best node: %s", n.getName()));
+                n.setCores(n.getCores() - chain.getNode(stage - 1).getCores());
+                n.setRam(n.getRam() - chain.getNode(stage - 1).getRam());
+
+                placement.add(this.nodes.indexOf(n));
+            } else {
+                feasibleNodes.add(currentFeasibleNodes);
+            }
+
+            if (stage == chain.nodes() - 1) { // the last stage must be placed in placed
+                Node n = currentFeasibleNodes.get(0);
+                logger.info(String.format("best node: %s", n.getName()));
                 n.setCores(n.getCores() - t.getCores());
                 n.setRam(n.getRam() - t.getRam());
 
-                placement.add(bestNode);
-            } else {
-                feasibleNodes.add(currentFeasibleNodes);
+                placement.add(this.nodes.indexOf(n));
             }
         }
 
