@@ -22,6 +22,7 @@ import home.parham.roadtomsc.problem.Config;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Bari {
     private final static Logger logger = Logger.getLogger(Bari.class.getName());
@@ -92,9 +93,9 @@ public class Bari {
             }
 
             if (stage > 0) {
-                // provide a boolean that indicates reachability for each node from the previous stage
-                // here we select a node for previous stage that has more reachability in current stage
-                // by this metric we have more choice in the next stage but there is no guarantee for that
+                // Provide a boolean that indicates reachability for each node from the previous stage.
+                // Here we select a node for the previous stage that has more reachability in the current
+                // stage by this metric we have more choice in the next stage, but there is no guarantee for that as you know.
                 List<Node> previousStageNodes = feasibleNodes.get(stage - 1);
                 List<Map<Integer, Boolean>> previousStageNodesBFSResults = new ArrayList<>();
                 // here we assume chains has the linear format
@@ -148,7 +149,21 @@ public class Bari {
             }
         }
 
-        // TODO: place the VNFM in last stage
+        // Place the VNFM based on the current placement of the chain.
+        // There is only one VNFM for a chain, and we find it based on the set of available manager nodes.
+        logger.info(" -- VNFM -- ");
+        Set<Integer> availableManagers = IntStream.range(0, this.nodes.size()).boxed().collect(Collectors.toSet());
+        placement.stream().map(id -> this.nodes.get(id).getNotManagerNodes()).forEach(availableManagers::removeAll);
+        // Here we check the network connectivity between managers and placed chain
+        availableManagers = availableManagers.stream().filter(n -> {
+            Map<Integer, Boolean> reachability = placement.stream().distinct().collect(Collectors.toMap(
+                    i -> i,
+                    i -> false
+            ));
+            bfs(n, reachability, cfg.getVnfmBandwidth());
+            return !reachability.containsValue(false);
+        }).collect(Collectors.toSet());
+        logger.info("Available managers: " + Arrays.toString(availableManagers.toArray()));
 
         this.placement.add(placement);
     }
