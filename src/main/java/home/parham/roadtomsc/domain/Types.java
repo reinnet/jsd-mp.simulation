@@ -53,7 +53,7 @@ public class Types {
          */
         private boolean manageable;
 
-        private Type(int index, int cores, int ram, boolean ingress, boolean egress, boolean manageable) {
+        private Type(int index, int cores, int ram, boolean egress, boolean ingress, boolean manageable) {
             this.cores = cores;
             this.ram = ram;
             this.index = index;
