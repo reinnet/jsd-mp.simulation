@@ -211,7 +211,12 @@ public class Bari {
         logger.info("Available managers: " + Arrays.toString(availableManagers.toArray()));
 
         // Choose physical node randomly and update its core and ram
-        int selectedManagerIndex = availableManagers.stream().findFirst().get();
+        Optional<Integer> op = availableManagers.stream().findFirst();
+        if (!op.isPresent()) {
+            this.placement.add(null);
+            return;
+        }
+        int selectedManagerIndex = op.get();
         Node selectedManager = this.nodes.get(selectedManagerIndex);
         // Update the number of managedVNFs on selected node
         this.managedVNFs.compute(selectedManagerIndex, (index, managed) -> (managed == null ? 0 : managed) + chain.nodes());
