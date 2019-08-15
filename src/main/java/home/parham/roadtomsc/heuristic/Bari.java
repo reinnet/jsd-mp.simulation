@@ -27,16 +27,30 @@ import java.util.stream.IntStream;
 public class Bari {
     private final static Logger logger = Logger.getLogger(Bari.class.getName());
 
+    /**
+     * Problem's configuration
+     */
     private Config cfg;
+
     /**
      * This is a copy from nodes of configuration object. This will be modified during the process of selection.
      */
     private List<Node> nodes;
+
+    /**
+     * ManagedVNFs stores the number of managedVNFs for a physical node to count number of license and more
+     */
+    private Map<Integer, Integer> managedVNFs;
+
     /**
      * This is a copy from links of configuration object. This will be modified during the process of selection.
      */
     private List<Link> links;
 
+    /**
+     * Placement stores the placement of chains' VNF on the physical node.
+     * It is used as the final result for Bari algorithm.
+     */
     private ArrayList<ArrayList<Integer>> placement;
 
     public Bari(Config cfg) {
@@ -44,6 +58,7 @@ public class Bari {
         this.placement = new ArrayList<>();
         this.nodes = new ArrayList<>(this.cfg.getNodes());
         this.links = new ArrayList<>(this.cfg.getLinks());
+        this.managedVNFs = new HashMap<>();
     }
 
 
@@ -60,6 +75,7 @@ public class Bari {
 
     /**
      * place places the given chain with Bari algorithm
+     *
      * @param chain for placement
      */
     private void place(Chain chain) {
@@ -70,6 +86,11 @@ public class Bari {
 
         // List of the feasible's nodes in each stage
         List<List<Node>> feasibleNodes = new ArrayList<>();
+
+
+        // ==================================================
+        // VNF Placement
+        // ==================================================
 
         // each node represents the stage in Bari multi-stage graph,
         // in each stage a node selected for previous stage and each stage
@@ -149,14 +170,38 @@ public class Bari {
             }
         }
 
+        // ==================================================
+        // VNFM Placement
+        // ==================================================
+
         // Place the VNFM based on the current placement of the chain.
         // There is only one VNFM for a chain, and we find it based on the set of available manager nodes.
         logger.info(" -- VNFM -- ");
+        // managedNodes is an array of physical nodes that host a manageable VNF of the chain
+        List<Integer> managedNodes = new ArrayList<>();
+        for (int i : placement) {
+            if (chain.getNode(i).isManageable()) {
+                managedNodes.add(i);
+            }
+        }
         Set<Integer> availableManagers = IntStream.range(0, this.nodes.size()).boxed().collect(Collectors.toSet());
-        placement.stream().map(id -> this.nodes.get(id).getNotManagerNodes()).forEach(availableManagers::removeAll);
+        managedNodes.stream().map(id -> this.nodes.get(id).getNotManagerNodes()).forEach(availableManagers::removeAll);
+        // Here we check the VNFM resources by counting the newly created instances
+        availableManagers = availableManagers.stream().filter(n -> {
+            // newly created VNFM instances
+            int instances = (int) Math.ceil(
+                    (double) (-this.managedVNFs.getOrDefault(n, 0) % this.cfg.getVnfmCapacity()
+                            + chain.getNodes().stream().filter(Types.Type::isManageable).count())
+                            / this.cfg.getVnfmCapacity());
+            Node pn = this.nodes.get(n);
+            if (instances * this.cfg.getVnfmCores() > pn.getCores()) {
+                return false;
+            }
+            return instances * this.cfg.getVnfmRam() <= pn.getRam();
+        }).collect(Collectors.toSet());
         // Here we check the network connectivity between managers and placed chain
         availableManagers = availableManagers.stream().filter(n -> {
-            Map<Integer, Boolean> reachability = placement.stream().distinct().collect(Collectors.toMap(
+            Map<Integer, Boolean> reachability = managedNodes.stream().distinct().collect(Collectors.toMap(
                     i -> i,
                     i -> false
             ));
@@ -164,12 +209,28 @@ public class Bari {
             return !reachability.containsValue(false);
         }).collect(Collectors.toSet());
         logger.info("Available managers: " + Arrays.toString(availableManagers.toArray()));
+        // Choose physical node randomly and update its details
+        int selectedManagerIndex = availableManagers.stream().findFirst().get();
+        Node selectedManager = this.nodes.get(selectedManagerIndex);
+        // Update the number of managedVNFs on selected node
+        this.managedVNFs.compute(selectedManagerIndex, (index, managed) -> (managed == null ? 0 : managed) + chain.nodes());
+        // newly created VNFM instances
+        int instances = (int) Math.ceil(
+                (double) (-this.managedVNFs.getOrDefault(selectedManagerIndex, 0) % this.cfg.getVnfmCapacity()
+                        + chain.getNodes().stream().filter(Types.Type::isManageable).count())
+                        / this.cfg.getVnfmCapacity());
+        selectedManager.setCores(selectedManager.getCores() - instances * this.cfg.getVnfmCores());
+        selectedManager.setRam(selectedManager.getRam() - instances * this.cfg.getVnfmRam());
+        logger.info(String.format("Selected manager is %s with %d VNFM instances for %d VNF",
+                selectedManager.getName(), instances,
+                chain.getNodes().stream().filter(Types.Type::isManageable).count())
+        );
 
         this.placement.add(placement);
     }
 
     /**
-     * @param root is the source of BFS that has depth 0
+     * @param root         is the source of BFS that has depth 0
      * @param reachability is the map that will be filled by true when the node is reachable from the source
      */
     private void bfs(int root, Map<Integer, Boolean> reachability, int bandwidth) {
