@@ -232,28 +232,47 @@ public class Bari {
 
     /**
      * @param root         is the source of BFS that has depth 0
-     * @param reachability is the map that will be filled by true when the node is reachable from the source
+     * @param reachability is the map that contains nodes which needs reachability check,
+     *                     and the node's key will be filled by true when the node is reachable from the source.
+     * @return a map that contains the user given keys with their path from the source.
      */
-    private void bfs(int root, Map<Integer, Boolean> reachability, int bandwidth) {
+    private Map<Integer, List<Integer>> bfs(int root, Map<Integer, Boolean> reachability, int bandwidth) {
+        logger.fine("BFS from " + root + " for " + reachability.keySet().toString());
         Queue<Integer> q = new LinkedList<>();
+        Queue<List<Integer>> path = new LinkedList<>();
         Map<Integer, Boolean> seen = new HashMap<>();
+        Map<Integer, List<Integer>> result = new HashMap<>();
 
         q.add(root);
+        path.add(new ArrayList<>(root));
 
         while (!q.isEmpty()) {
             int source = q.remove();
+            List<Integer> rootPath = path.remove();
+            rootPath.add(source);
 
             if (seen.getOrDefault(source, false))
                 continue;
 
+            // update reachability
             reachability.computeIfPresent(source, (node, reachable) -> true);
             seen.put(source, true);
+
+            // update path
+            if (reachability.containsKey(source)) {
+                logger.fine(Arrays.toString(rootPath.toArray()));
+                result.put(source, rootPath);
+            }
 
             // TODO: check the link bandwidth here
             this.cfg.getLinks().stream()
                     .filter(l -> l.getSource() == source)
                     .filter(l -> l.getBandwidth() > bandwidth)
-                    .forEach(l -> q.add(l.getDestination()));
+                    .forEach(l -> {
+                        q.add(l.getDestination());
+                        path.add(new ArrayList<>(rootPath));
+                    });
         }
+        return result;
     }
 }
