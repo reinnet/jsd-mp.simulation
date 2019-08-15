@@ -209,7 +209,8 @@ public class Bari {
             return !reachability.containsValue(false);
         }).collect(Collectors.toSet());
         logger.info("Available managers: " + Arrays.toString(availableManagers.toArray()));
-        // Choose physical node randomly and update its details
+
+        // Choose physical node randomly and update its core and ram
         int selectedManagerIndex = availableManagers.stream().findFirst().get();
         Node selectedManager = this.nodes.get(selectedManagerIndex);
         // Update the number of managedVNFs on selected node
