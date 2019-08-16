@@ -91,7 +91,7 @@ public class Bari {
         // List of the feasible's nodes in each stage
         List<List<Node>> feasibleNodes = new ArrayList<>();
 
-        // List of the feasible's nodes paths in each stage
+        // List of the feasible's nodes' paths in each stage
         List<Map<Integer, List<Integer>>> feasibleNodesPath = new ArrayList<>();
 
 
