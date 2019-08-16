@@ -43,6 +43,10 @@ public class Bari {
     private Map<Integer, Integer> managedVNFs;
 
     /**
+     * ManagerRoutes holds the route information between each VNF's physical server and it's chain's VNFM
+     */
+
+    /**
      * This is a copy from links of configuration object. This will be modified during the process of selection.
      */
     private List<Link> links;
@@ -184,6 +188,7 @@ public class Bari {
                 managedNodes.add(i);
             }
         }
+        Map<Integer, Map<Integer, List<Integer>>> managerRoutes = new HashMap<>();
         Set<Integer> availableManagers = IntStream.range(0, this.nodes.size()).boxed().collect(Collectors.toSet());
         managedNodes.stream().map(id -> this.nodes.get(id).getNotManagerNodes()).forEach(availableManagers::removeAll);
         // Here we check the VNFM resources by counting the newly created instances
@@ -205,7 +210,7 @@ public class Bari {
                     i -> i,
                     i -> false
             ));
-            bfs(n, reachability, cfg.getVnfmBandwidth());
+            managerRoutes.put(n, bfs(n, reachability, cfg.getVnfmBandwidth()));
             return !reachability.containsValue(false);
         }).collect(Collectors.toSet());
         logger.info("Available managers: " + Arrays.toString(availableManagers.toArray()));
@@ -216,7 +221,7 @@ public class Bari {
             this.placement.add(null);
             return;
         }
-        int selectedManagerIndex = op.get();
+        final int selectedManagerIndex = op.get();
         Node selectedManager = this.nodes.get(selectedManagerIndex);
         // Update the number of managedVNFs on selected node
         this.managedVNFs.compute(selectedManagerIndex, (index, managed) -> (managed == null ? 0 : managed) + chain.nodes());
@@ -231,6 +236,18 @@ public class Bari {
                 selectedManager.getName(), instances,
                 chain.getNodes().stream().filter(Types.Type::isManageable).count())
         );
+        // Each VNF needs a communication link with its chain VNFM. This link start from its physical node to VNFM.
+        // Here we allocate management's bandwidth on this path.
+        managedNodes.forEach(n -> {
+            List<Integer> path = managerRoutes.get(selectedManagerIndex).get(n);
+            for (int i = 0; i < path.size() - 1; i++) {
+                int source = path.get(i);
+                int destination = path.get(i + 1);
+                this.links.stream()
+                        .filter(l -> l.getSource() == source && l.getDestination() == destination)
+                        .forEach(l -> l.setBandwidth(l.getBandwidth() - this.cfg.getVnfmBandwidth()));
+            }
+        });
 
         this.placement.add(placement);
     }
@@ -270,7 +287,7 @@ public class Bari {
             }
 
             // TODO: check the link bandwidth here
-            this.cfg.getLinks().stream()
+            this.links.stream()
                     .filter(l -> l.getSource() == source)
                     .filter(l -> l.getBandwidth() > bandwidth)
                     .forEach(l -> {
