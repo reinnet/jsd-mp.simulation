@@ -26,6 +26,10 @@ public class Link {
         return destination;
     }
 
+    public void setBandwidth(int bandwidth) {
+        this.bandwidth = bandwidth;
+    }
+
     @Override
     public String toString() {
         return "Link{" +
