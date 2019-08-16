@@ -91,6 +91,9 @@ public class Bari {
         // List of the feasible's nodes in each stage
         List<List<Node>> feasibleNodes = new ArrayList<>();
 
+        // List of the feasible's nodes paths in each stage
+        List<Map<Integer, List<Integer>>> feasibleNodesPath = new ArrayList<>();
+
 
         // ==================================================
         // VNF Placement
@@ -122,15 +125,36 @@ public class Bari {
                 // Here we select a node for the previous stage that has more reachability in the current
                 // stage by this metric we have more choice in the next stage, but there is no guarantee for that as you know.
                 List<Node> previousStageNodes = feasibleNodes.get(stage - 1);
+                final Map<Integer, List<Integer>> previousStagePath = stage > 1 ? feasibleNodesPath.get(stage - 2) : new HashMap<>();
+
                 List<Map<Integer, Boolean>> previousStageNodesBFSResults = new ArrayList<>();
+                List<Map<Integer, List<Integer>>> previousStageNodesBFSPaths = new ArrayList<>();
                 // here we assume chains has the linear format
                 int bandwidth = chain.getLink(stage - 1).getBandwidth();
+                int previousBandwidth = stage > 1 ? chain.getLink(stage - 2).getBandwidth(): 0;
                 previousStageNodes.forEach(node -> {
                     Map<Integer, Boolean> reachability = currentFeasibleNodes.stream().collect(Collectors.toMap(
                             n -> this.cfg.getNodeIndex(n.getName()),
                             n -> false
                     ));
-                    this.bfs(this.cfg.getNodeIndex(node.getName()), reachability, bandwidth);
+                    // assume the physical link status based on the previous stage paths
+                    List<Integer> path = previousStagePath.getOrDefault(this.cfg.getNodeIndex(node.getName()), new ArrayList<>());
+                    for (int i = 0; i < path.size() - 1; i++) {
+                        int source = path.get(i);
+                        int destination = path.get(i + 1);
+                        this.links.stream()
+                                .filter(l -> l.getSource() == source && l.getDestination() == destination)
+                                .forEach(l -> l.setBandwidth(l.getBandwidth() - previousBandwidth));
+                    }
+                    previousStageNodesBFSPaths.add(this.bfs(this.cfg.getNodeIndex(node.getName()), reachability, bandwidth));
+                    // revert the assumption
+                    for (int i = 0; i < path.size() - 1; i++) {
+                        int source = path.get(i);
+                        int destination = path.get(i + 1);
+                        this.links.stream()
+                                .filter(l -> l.getSource() == source && l.getDestination() == destination)
+                                .forEach(l -> l.setBandwidth(l.getBandwidth() + previousBandwidth));
+                    }
                     previousStageNodesBFSResults.add(reachability);
                 });
 
@@ -153,11 +177,23 @@ public class Bari {
 
                 // select a physical node with maximum reachable nodes
                 int bestNode = previousStageNodesBFSResults.indexOf(op.get());
+                feasibleNodesPath.add(previousStageNodesBFSPaths.get(bestNode));
 
+                // update the selected node cores and ram
                 Node n = previousStageNodes.get(bestNode);
                 logger.info(String.format("best node: %s", n.getName()));
                 n.setCores(n.getCores() - chain.getNode(stage - 1).getCores());
                 n.setRam(n.getRam() - chain.getNode(stage - 1).getRam());
+
+                // update the selected node links of its previous stage
+                List<Integer> path = previousStagePath.getOrDefault(this.nodes.indexOf(n), new ArrayList<>());
+                for (int i = 0; i < path.size() - 1; i++) {
+                    int source = path.get(i);
+                    int destination = path.get(i + 1);
+                    this.links.stream()
+                            .filter(l -> l.getSource() == source && l.getDestination() == destination)
+                            .forEach(l -> l.setBandwidth(l.getBandwidth() - previousBandwidth));
+                }
 
                 placement.add(this.nodes.indexOf(n));
             } else {
@@ -170,6 +206,16 @@ public class Bari {
                 n.setCores(n.getCores() - t.getCores());
                 n.setRam(n.getRam() - t.getRam());
 
+                List<Integer> path = feasibleNodesPath.get(stage - 1).getOrDefault(this.nodes.indexOf(n), new ArrayList<>());
+                int bandwidth = chain.getLink(stage - 1).getBandwidth();
+                for (int i = 0; i < path.size() - 1; i++) {
+                    int source = path.get(i);
+                    int destination = path.get(i + 1);
+                    this.links.stream()
+                            .filter(l -> l.getSource() == source && l.getDestination() == destination)
+                            .forEach(l -> l.setBandwidth(l.getBandwidth() - bandwidth));
+                }
+
                 placement.add(this.nodes.indexOf(n));
             }
         }
@@ -177,6 +223,7 @@ public class Bari {
         // ==================================================
         // VNFM Placement
         // ==================================================
+        // Please note that we consider the management path's direction from the manager to the nodes
 
         // Place the VNFM based on the current placement of the chain.
         // There is only one VNFM for a chain, and we find it based on the set of available manager nodes.
@@ -250,6 +297,7 @@ public class Bari {
         });
 
         this.placement.add(placement);
+        System.out.println(Arrays.toString(this.links.toArray()));
     }
 
     /**
