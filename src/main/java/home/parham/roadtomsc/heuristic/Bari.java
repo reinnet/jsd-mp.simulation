@@ -18,6 +18,7 @@ import home.parham.roadtomsc.domain.Link;
 import home.parham.roadtomsc.domain.Node;
 import home.parham.roadtomsc.domain.Types;
 import home.parham.roadtomsc.problem.Config;
+import home.parham.roadtomsc.problem.Solution;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -55,11 +56,23 @@ public class Bari {
      * Placement stores the placement of chains' VNF on the physical node.
      * It is used as the final result for Bari algorithm.
      */
-    private ArrayList<ArrayList<Integer>> placement;
+    private List<List<Integer>> placement;
+
+    /**
+     * vnfmPlacement stores the placement of chains' VNFM on the physical node.
+     * It is used as the final result for Bari algorithm
+     */
+    private List<Integer> vnfmPlacement;
+
+    /**
+     * cost is the final result of algorithm
+     */
+    private int cost;
 
     public Bari(Config cfg) {
         this.cfg = cfg;
         this.placement = new ArrayList<>();
+        this.vnfmPlacement = new ArrayList<>();
         this.nodes = new ArrayList<>(this.cfg.getNodes());
         this.links = new ArrayList<>(this.cfg.getLinks());
         this.managedVNFs = new HashMap<>();
@@ -69,11 +82,14 @@ public class Bari {
     /**
      * solve the problem and then return the placement
      */
-    public List<List<Integer>> solve() {
+    public Solution solve() {
         this.cfg.getChains().forEach(this::place);
 
-        return Collections.unmodifiableList(
-                this.placement.stream().map(a -> a != null ? Collections.unmodifiableList(a) : null).collect(Collectors.toList())
+        return new Solution(
+                this.cost,
+                this.placement.stream().map(p -> p == null ? new ArrayList<String>() : p.stream().map(n -> this.nodes.get(n).getName()).collect(Collectors.toList())).collect(Collectors.toList()),
+                this.vnfmPlacement.stream().map(n -> n == -1 ? "-" : this.nodes.get(n).getName()).collect(Collectors.toList()),
+                null
         );
     }
 
@@ -116,7 +132,7 @@ public class Bari {
             logger.info("current feasible nodes: " + Arrays.toString(currentFeasibleNodes.stream().map(Node::getName).toArray()));
 
             if (currentFeasibleNodes.size() == 0) {
-                this.placement.add(null);
+                this.cannotPlace();
                 return;
             }
 
@@ -165,8 +181,7 @@ public class Bari {
                         ));
 
                 if (!op.isPresent()) {
-                    // there is no way to place the given chain
-                    this.placement.add(null);
+                    this.cannotPlace();
                     return;
                 }
 
@@ -265,20 +280,22 @@ public class Bari {
         // Choose physical node randomly and update its core and ram
         Optional<Integer> op = availableManagers.stream().findFirst();
         if (!op.isPresent()) {
-            this.placement.add(null);
+            this.cannotPlace();
             return;
         }
+
         final int selectedManagerIndex = op.get();
         Node selectedManager = this.nodes.get(selectedManagerIndex);
-        // Update the number of managedVNFs on selected node
-        this.managedVNFs.compute(selectedManagerIndex, (index, managed) -> (managed == null ? 0 : managed) + chain.nodes());
         // newly created VNFM instances
         int instances = (int) Math.ceil(
                 (double) (-this.managedVNFs.getOrDefault(selectedManagerIndex, 0) % this.cfg.getVnfmCapacity()
                         + chain.getNodes().stream().filter(Types.Type::isManageable).count())
                         / this.cfg.getVnfmCapacity());
+        // Update the number of managedVNFs on selected node
+        this.managedVNFs.compute(selectedManagerIndex, (index, managed) -> (managed == null ? 0 : managed) + chain.nodes());
         selectedManager.setCores(selectedManager.getCores() - instances * this.cfg.getVnfmCores());
         selectedManager.setRam(selectedManager.getRam() - instances * this.cfg.getVnfmRam());
+        this.cost -= instances * this.cfg.getVnfmLicenseFee();
         logger.info(String.format("Selected manager is %s with %d VNFM instances for %d VNF",
                 selectedManager.getName(), instances,
                 chain.getNodes().stream().filter(Types.Type::isManageable).count())
@@ -297,7 +314,17 @@ public class Bari {
         });
 
         this.placement.add(placement);
+        this.vnfmPlacement.add(selectedManagerIndex);
+        this.cost += chain.getCost();
         System.out.println(Arrays.toString(this.links.toArray()));
+    }
+
+    /**
+     * Provide a unique way to skip the current chain placement in place method
+     */
+    private void cannotPlace() {
+        this.placement.add(null);
+        this.vnfmPlacement.add(-1);
     }
 
     /**
