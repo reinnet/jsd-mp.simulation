@@ -3,7 +3,7 @@
  * ======================================
  * [] Project Name : roadtomsc
  *
- * [] Package Name : home.parham.roadtomsc.model
+ * [] Package Name : home.parham.roadtomsc.exact.model
  *
  * [] Creation Date : 02-07-2019
  *
@@ -16,7 +16,6 @@ package home.parham.roadtomsc.problem;
 import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Link;
 import home.parham.roadtomsc.domain.Node;
-import home.parham.roadtomsc.domain.Types;
 
 import java.util.ArrayList;
 
@@ -106,42 +105,10 @@ public class ConfigBuilder {
      * Builds the immutable instance of the model configuration based on the given parameters
      */
     public Config build() {
-        int W = nodes.size();
-        // connectivity matrix
-        int[][] E = new int[W][W];
-        for (int i = 0; i < W; i++) {
-            for (int j = 0; j < W; j++) {
-                E[i][j] = 0;
-            }
-        }
-        for (Link link : this.links) {
-            E[link.getSource()][link.getDestination()] = link.getBandwidth();
-        }
-
-        // VNF types
-        int F = Types.len();
-
-        // SFC requests
-        int T = chains.size();
-
-        // Total number of VNFs and virtual links
-        int V = 0;
-        int U = 0;
-        for (Chain chain : chains) {
-            V += chain.nodes();
-            U += chain.links();
-        }
-
         return new Config(
                 this.nodes,
-                W,
                 this.links,
-                E,
-                F,
                 this.chains,
-                T,
-                V,
-                U,
                 this.vnfmRam,
                 this.vnfmCores,
                 this.vnfmCapacity,
