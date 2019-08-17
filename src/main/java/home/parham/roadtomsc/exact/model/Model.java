@@ -1,8 +1,8 @@
-package home.parham.roadtomsc.model;
+package home.parham.roadtomsc.exact.model;
 
 import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Types;
-import home.parham.roadtomsc.problem.Config;
+import home.parham.roadtomsc.exact.Config;
 import ilog.concert.IloException;
 import ilog.concert.IloIntVar;
 import ilog.concert.IloLinearIntExpr;
