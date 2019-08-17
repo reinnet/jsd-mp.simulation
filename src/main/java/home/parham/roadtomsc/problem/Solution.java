@@ -26,9 +26,12 @@ public class Solution {
      * Name of chain's manager physical server and `-` indicates error in placement
      */
     private List<String> vnfmPlacement;
-    private List<Map<Integer, List<String>>> vnfmRoutes;
+    /**
+     * Route from Manageable vnf to its manager and empty array indicates error in routing
+     */
+    private List<List<List<String>>> vnfmRoutes;
 
-    public Solution(int cost, List<List<String>> vnfPlacement, List<String> vnfmPlacement, List<Map<Integer, List<String>>> vnfmRoutes) {
+    public Solution(int cost, List<List<String>> vnfPlacement, List<String> vnfmPlacement, List<List<List<String>>> vnfmRoutes) {
         this.cost = cost;
         this.vnfPlacement = vnfPlacement;
         this.vnfmPlacement = vnfmPlacement;
@@ -47,7 +50,7 @@ public class Solution {
         return vnfmPlacement;
     }
 
-    public List<Map<Integer, List<String>>> getVnfmRoutes() {
+    public List<List<List<String>>> getVnfmRoutes() {
         return vnfmRoutes;
     }
 }
