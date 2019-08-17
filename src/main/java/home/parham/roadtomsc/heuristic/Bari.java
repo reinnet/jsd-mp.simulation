@@ -44,8 +44,9 @@ public class Bari {
     private Map<Integer, Integer> managedVNFs;
 
     /**
-     * ManagerRoutes holds the route information between each VNF's physical server and it's chain's VNFM
+     * vnfmRoutes holds the route information between each VNF's physical server and it's chain's VNFM
      */
+    private List<List<List<Integer>>> vnfmRoutes;
 
     /**
      * This is a copy from links of configuration object. This will be modified during the process of selection.
@@ -75,6 +76,7 @@ public class Bari {
         this.vnfmPlacement = new ArrayList<>();
         this.nodes = new ArrayList<>(this.cfg.getNodes());
         this.links = new ArrayList<>(this.cfg.getLinks());
+        this.vnfmRoutes = new ArrayList<>();
         this.managedVNFs = new HashMap<>();
     }
 
@@ -89,7 +91,7 @@ public class Bari {
                 this.cost,
                 this.placement.stream().map(p -> p == null ? new ArrayList<String>() : p.stream().map(n -> this.nodes.get(n).getName()).collect(Collectors.toList())).collect(Collectors.toList()),
                 this.vnfmPlacement.stream().map(n -> n == -1 ? "-" : this.nodes.get(n).getName()).collect(Collectors.toList()),
-                null
+                this.vnfmRoutes.stream().map(p -> p == null ? new ArrayList<List<String>>() : p.stream().map(n -> n.stream().map(i -> this.nodes.get(i).getName()).collect(Collectors.toList())).collect(Collectors.toList())).collect(Collectors.toList())
         );
     }
 
@@ -315,8 +317,12 @@ public class Bari {
 
         this.placement.add(placement);
         this.vnfmPlacement.add(selectedManagerIndex);
+        List<List<Integer>> vnfmRoutes = new ArrayList<>();
+        managedNodes.forEach(n -> {
+            vnfmRoutes.add(managerRoutes.get(selectedManagerIndex).get(n));
+        });
+        this.vnfmRoutes.add(vnfmRoutes);
         this.cost += chain.getCost();
-        System.out.println(Arrays.toString(this.links.toArray()));
     }
 
     /**
@@ -325,6 +331,7 @@ public class Bari {
     private void cannotPlace() {
         this.placement.add(null);
         this.vnfmPlacement.add(-1);
+        this.vnfmRoutes.add(null);
     }
 
     /**
