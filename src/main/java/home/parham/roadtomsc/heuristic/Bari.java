@@ -18,6 +18,7 @@ import home.parham.roadtomsc.domain.Link;
 import home.parham.roadtomsc.domain.Node;
 import home.parham.roadtomsc.domain.Types;
 import home.parham.roadtomsc.problem.Config;
+import home.parham.roadtomsc.problem.Method;
 import home.parham.roadtomsc.problem.Solution;
 
 import java.util.*;
@@ -25,7 +26,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class Bari {
+public class Bari implements Method {
     private final static Logger logger = Logger.getLogger(Bari.class.getName());
 
     /**
@@ -84,6 +85,7 @@ public class Bari {
     /**
      * solve the problem and then return the placement
      */
+    @Override
     public Solution solve() {
         this.cfg.getChains().forEach(this::place);
 
