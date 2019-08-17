@@ -14,7 +14,6 @@
 package home.parham.roadtomsc.problem;
 
 import java.util.List;
-import java.util.Map;
 
 public class Solution {
     private int cost;
