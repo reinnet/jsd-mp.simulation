@@ -11,11 +11,9 @@ import home.parham.roadtomsc.exact.Solver;
 import home.parham.roadtomsc.heuristic.Bari;
 import home.parham.roadtomsc.problem.Config;
 import home.parham.roadtomsc.problem.ConfigBuilder;
-import home.parham.roadtomsc.problem.Solution;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
