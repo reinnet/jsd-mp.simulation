@@ -13,6 +13,8 @@
 
 package home.parham.roadtomsc.problem;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 public class Solution {
@@ -51,5 +53,46 @@ public class Solution {
 
     public List<List<List<String>>> getVnfmRoutes() {
         return vnfmRoutes;
+    }
+
+    @Override
+    public String toString() {
+        StringWriter sw = new StringWriter();
+        PrintWriter writer = new PrintWriter(sw);
+
+        writer.println();
+        writer.printf("Cost: %d\n", this.getCost());
+        writer.println();
+
+        writer.println();
+        List<List<String>> vnfPlacement = this.getVnfPlacement();
+        for (int c = 0; c < vnfPlacement.size(); c++) {
+            writer.printf("Chain %d:\n", c);
+            for (int i = 0; i < vnfPlacement.get(c).size(); i++) {
+                writer.printf("Node %d is mapped on %s\n", i, vnfPlacement.get(c).get(i));
+            }
+        }
+        writer.println();
+
+        writer.println();
+        List<String> vnfmPlacement = this.getVnfmPlacement();
+        for (int c = 0; c < vnfmPlacement.size(); c++) {
+            writer.printf("Chain %d manager is %s\n", c, vnfmPlacement.get(c));
+        }
+        writer.println();
+
+        writer.println();
+        List<List<List<String>>> vnfmRoutes = this.getVnfmRoutes();
+        for (int c = 0; c < vnfmRoutes.size(); c++) {
+            writer.printf("Chain %d Management Routes:\n", c);
+            for (int i = 0; i < vnfmRoutes.get(c).size(); i++) {
+                writer.printf("%d: %s\n", i, vnfmRoutes.get(c).get(i).toString());
+            }
+        }
+        writer.println();
+
+        writer.flush();
+
+        return sw.toString();
     }
 }
