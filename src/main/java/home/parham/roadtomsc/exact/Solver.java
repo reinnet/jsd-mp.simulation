@@ -153,6 +153,7 @@ public class Solver implements Method {
             }
         } catch (IloException e) {
             e.printStackTrace();
+            return null;
         }
 
         // close the result file
