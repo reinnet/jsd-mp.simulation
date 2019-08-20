@@ -109,7 +109,7 @@ modules.xml
 
 # result file
 # this file contains the result of the configured model
-result.txt
+exact-result.txt
 
 # linear programming file
 *.lp
