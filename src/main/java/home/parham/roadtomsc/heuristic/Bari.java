@@ -249,9 +249,9 @@ public class Bari implements Method {
         logger.info(" -- VNFM -- ");
         // managedNodes is an array of physical nodes that host a manageable VNF of the chain
         List<Integer> managedNodes = new ArrayList<>();
-        for (int i : placement) {
+        for (int i = 0; i < placement.size(); i++) {
             if (chain.getNode(i).isManageable()) {
-                managedNodes.add(i);
+                managedNodes.add(placement.get(i));
             }
         }
         Map<Integer, Map<Integer, List<Integer>>> managerRoutes = new HashMap<>();
