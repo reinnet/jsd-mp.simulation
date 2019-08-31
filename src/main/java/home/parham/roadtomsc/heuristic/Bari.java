@@ -283,7 +283,7 @@ public class Bari implements Method {
 
         // Choose physical node randomly and update its core and ram
         // please note that here we use the manager that has more instances
-        Optional<Integer> op = availableManagers.stream().max(Comparator.comparingInt(o -> this.managedVNFs.getOrDefault(o, 0)));
+        Optional<Integer> op = availableManagers.stream().min(Comparator.comparingInt(o -> this.managedVNFs.getOrDefault(o, 0) % this.cfg.getVnfmCapacity() == 0 ? this.cfg.getVnfmCapacity() : this.managedVNFs.getOrDefault(o, 0) % this.cfg.getVnfmCapacity()));
         if (!op.isPresent()) {
             this.cannotPlace();
             return;
