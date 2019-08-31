@@ -20,7 +20,7 @@ sed -i "s#cplexLibrary =.*#cplexLibrary = ${CPLEX_LIB}#g" build.gradle
 gradle run --args config
 ```
 
-## Results
+## Exact Results
 There are the reults of using this simulation for solving the real problem of placing the NFV chains on k-ary fat tree.
 In these results there is no constraint on license fee of VNFMs.
 
@@ -47,3 +47,15 @@ In these results there is no constraint on license fee of VNFMs.
 | chains | time         |
 |--------|--------------|
 | 12     | 14:53 min    |
+
+## Heuristic Results
+
+Each instance has a price between 20 to 30.
+We have 100 chains, and each chain has a length between 5 to 7. I have run each test with 3 different versions of the algorithm and report the proportion of the final revenue to optimal revenue.
+
+| revenue per instance | Bari | Parham | Parham + Better VNFM Placement |
+|----------------------|------|--------|--------------------------------|
+| 10 - 20              | 60   | 65     | 68                             |
+| 15 - 25              | 61   | 81     | 82                             |
+
+As the numbers show, the placement algorithm do better when the per instances revenue increase.
