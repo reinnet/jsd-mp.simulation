@@ -68,15 +68,21 @@ public class Solver implements Method {
                 writer.println(" cost = " + cplex.getObjValue());
                 writer.println();
 
+                int acceptedChains = 0;
                 writer.println();
                 writer.println(" >> Chains");
                 for (int i = 0; i < cfg.getT(); i++) {
                     if (cplex.getValue(model.getX()[i]) == 1) {
                         writer.printf("Chain %s is accepted.\n", i);
+                        acceptedChains++;
                     } else {
                         writer.printf("Chain %s is not accepted.\n", i);
                     }
                 }
+                writer.println();
+
+                writer.println();
+                writer.printf("%d chains are accepted", acceptedChains);
                 writer.println();
 
                 writer.println();
