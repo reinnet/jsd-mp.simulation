@@ -44,7 +44,7 @@ public class Model {
 
 
     /**
-     * the number of VNFMs that are used in server _w_.
+     * the number of VNFMs (each vnfm has its capacity and license fee) that are used in server _w_.
      *
      * yh[w]
      * .lp format: y (physical node)
