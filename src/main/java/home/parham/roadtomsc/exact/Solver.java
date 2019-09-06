@@ -86,6 +86,14 @@ public class Solver implements Method {
                 writer.println();
 
                 writer.println();
+                int usedVNFMs = 0;
+                for (int i = 0; i < this.cfg.getW(); i++) {
+                    usedVNFMs += cplex.getValue(model.getyHat()[i]);
+                }
+                writer.printf("%d VNFMs is used", usedVNFMs);
+                writer.println();
+
+                writer.println();
                 writer.println(" >> Instance mapping");
                 int v = 0;
                 for (int h = 0; h < cfg.getT(); h++) {
