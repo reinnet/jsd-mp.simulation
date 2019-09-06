@@ -67,6 +67,11 @@ public class Bari implements Method {
     private List<Integer> vnfmPlacement;
 
     /**
+     * vnfmInstances counts the number of used vnfmInstances
+     */
+    private int vnfmInstances;
+
+    /**
      * cost is the final result of algorithm
      */
     private int cost;
@@ -93,7 +98,8 @@ public class Bari implements Method {
                 this.cost,
                 this.placement.stream().map(p -> p == null ? new ArrayList<String>() : p.stream().map(n -> this.nodes.get(n).getName()).collect(Collectors.toList())).collect(Collectors.toList()),
                 this.vnfmPlacement.stream().map(n -> n == -1 ? "-" : this.nodes.get(n).getName()).collect(Collectors.toList()),
-                this.vnfmRoutes.stream().map(p -> p == null ? new ArrayList<List<String>>() : p.stream().map(n -> n.stream().map(i -> this.nodes.get(i).getName()).collect(Collectors.toList())).collect(Collectors.toList())).collect(Collectors.toList())
+                this.vnfmRoutes.stream().map(p -> p == null ? new ArrayList<List<String>>() : p.stream().map(n -> n.stream().map(i -> this.nodes.get(i).getName()).collect(Collectors.toList())).collect(Collectors.toList())).collect(Collectors.toList()),
+                this.vnfmInstances
         );
     }
 
@@ -301,6 +307,7 @@ public class Bari implements Method {
         selectedManager.setCores(selectedManager.getCores() - instances * this.cfg.getVnfmCores());
         selectedManager.setRam(selectedManager.getRam() - instances * this.cfg.getVnfmRam());
         this.cost -= instances * this.cfg.getVnfmLicenseFee();
+        this.vnfmInstances += instances;
         logger.info(String.format("Selected manager is %s with %d VNFM instances for %d VNF",
                 selectedManager.getName(), instances,
                 chain.getNodes().stream().filter(Types.Type::isManageable).count())

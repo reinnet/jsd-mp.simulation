@@ -31,12 +31,17 @@ public class Solution {
      * Route from Manageable vnf to its manager and empty array indicates error in routing
      */
     private List<List<List<String>>> vnfmRoutes;
+    /**
+     * Number of the used VNFMs instances
+     */
+    private int vnfmInstances;
 
-    public Solution(int cost, List<List<String>> vnfPlacement, List<String> vnfmPlacement, List<List<List<String>>> vnfmRoutes) {
+    public Solution(int cost, List<List<String>> vnfPlacement, List<String> vnfmPlacement, List<List<List<String>>> vnfmRoutes, int vnfmInstances) {
         this.cost = cost;
         this.vnfPlacement = vnfPlacement;
         this.vnfmPlacement = vnfmPlacement;
         this.vnfmRoutes = vnfmRoutes;
+        this.vnfmInstances = vnfmInstances;
     }
 
     public int getCost() {
@@ -78,6 +83,10 @@ public class Solution {
 
         writer.println();
         writer.printf("%d chains are accepted", acceptedChains);
+        writer.println();
+
+        writer.println();
+        writer.printf("%d vnfms are used", this.vnfmInstances);
         writer.println();
 
         writer.println();
