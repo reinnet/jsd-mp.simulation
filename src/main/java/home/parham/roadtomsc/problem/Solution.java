@@ -64,6 +64,7 @@ public class Solution {
         writer.printf("Cost: %d\n", this.getCost());
         writer.println();
 
+        int acceptedChains = 0;
         writer.println();
         List<List<String>> vnfPlacement = this.getVnfPlacement();
         for (int c = 0; c < vnfPlacement.size(); c++) {
@@ -71,7 +72,12 @@ public class Solution {
             for (int i = 0; i < vnfPlacement.get(c).size(); i++) {
                 writer.printf("Node %d is mapped on %s\n", i, vnfPlacement.get(c).get(i));
             }
+            acceptedChains += vnfPlacement.get(c).size() != 0 ? 1 : 0;
         }
+        writer.println();
+
+        writer.println();
+        writer.printf("%d chains are accepted", acceptedChains);
         writer.println();
 
         writer.println();
