@@ -139,6 +139,6 @@ public class Main {
         new Solver(cfg).solve();
 
         // solve using the heuristic method
-        System.out.println(new Bari(cfg).solve());
+        // System.out.println(new Bari(cfg).solve());
     }
 }

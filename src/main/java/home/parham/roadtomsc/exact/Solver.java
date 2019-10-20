@@ -15,6 +15,7 @@ package home.parham.roadtomsc.exact;
 
 import home.parham.roadtomsc.domain.Link;
 import home.parham.roadtomsc.exact.model.Model;
+import home.parham.roadtomsc.exact.model.ModelDisjoint;
 import home.parham.roadtomsc.problem.Method;
 import home.parham.roadtomsc.problem.Solution;
 import ilog.concert.IloException;
@@ -46,12 +47,23 @@ public class Solver implements Method {
         }
 
         try {
+            IloCplex dcplex = new IloCplex();
+
+
+            ModelDisjoint dmodel = new ModelDisjoint(dcplex, cfg);
+            dmodel.variables().objective().constraints();
+
+            dcplex.exportModel("pre.lp");
+            dcplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
+            if (!dcplex.solve()) {
+                return null;
+            }
+
             IloCplex cplex = new IloCplex();
-
             Model model = new Model(cplex, cfg);
-            model.variables().objective().constraints();
+            model.variables(dmodel.getX(), dmodel.getY(), dmodel.getZ(), dmodel.getTau(), dcplex).objective().constraints();
 
-            cplex.exportModel("simulation.lp");
+            cplex.exportModel("current.lp");
 
             cplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
 
