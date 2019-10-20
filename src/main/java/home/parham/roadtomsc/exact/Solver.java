@@ -14,8 +14,8 @@
 package home.parham.roadtomsc.exact;
 
 import home.parham.roadtomsc.domain.Link;
-import home.parham.roadtomsc.exact.model.Model;
-import home.parham.roadtomsc.exact.model.ModelDisjoint;
+import home.parham.roadtomsc.exact.model.Phase2;
+import home.parham.roadtomsc.exact.model.Phase1;
 import home.parham.roadtomsc.problem.Method;
 import home.parham.roadtomsc.problem.Solution;
 import ilog.concert.IloException;
@@ -47,44 +47,44 @@ public class Solver implements Method {
         }
 
         try {
-            IloCplex dcplex = new IloCplex();
+            IloCplex phase1Cplex = new IloCplex();
 
 
-            ModelDisjoint dmodel = new ModelDisjoint(dcplex, cfg);
-            dmodel.variables().objective().constraints();
+            Phase1 phase1 = new Phase1(phase1Cplex, cfg);
+            phase1.variables().objective().constraints();
 
-            dcplex.exportModel("pre.lp");
-            dcplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
-            if (!dcplex.solve()) {
+            phase1Cplex.exportModel("phase-1.lp");
+            phase1Cplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
+            if (!phase1Cplex.solve()) {
                 return null;
             }
 
-            IloCplex cplex = new IloCplex();
-            Model model = new Model(cplex, cfg);
-            model.variables(dmodel.getX(), dmodel.getY(), dmodel.getZ(), dmodel.getTau(), dcplex).objective().constraints();
+            IloCplex phase2Cplex = new IloCplex();
+            Phase2 phase2 = new Phase2(phase2Cplex, cfg);
+            phase2.variables(phase1.getX(), phase1.getY(), phase1.getZ(), phase1.getTau(), phase1Cplex).objective().constraints();
 
-            cplex.exportModel("current.lp");
+            phase2Cplex.exportModel("phase-2.lp");
 
-            cplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
+            phase2Cplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
 
             Instant now = Instant.now();
-            boolean solved = cplex.solve();
+            boolean solved = phase2Cplex.solve();
             System.out.printf("Problem solved in %s\n", Duration.between(now, Instant.now()));
 
             if (solved) {
                 writer.println();
-                writer.println(" Solution Status = " + cplex.getStatus());
+                writer.println(" Solution Status = " + phase2Cplex.getStatus());
                 writer.println();
 
                 writer.println();
-                writer.println(" cost = " + cplex.getObjValue());
+                writer.println(" cost = " + phase2Cplex.getObjValue());
                 writer.println();
 
                 int acceptedChains = 0;
                 writer.println();
                 writer.println(" >> Chains");
                 for (int i = 0; i < cfg.getT(); i++) {
-                    if (cplex.getValue(model.getX()[i]) == 1) {
+                    if (phase2Cplex.getValue(phase2.getX()[i]) == 1) {
                         writer.printf("Chain %s is accepted.\n", i);
                         acceptedChains++;
                     } else {
@@ -100,7 +100,7 @@ public class Solver implements Method {
                 writer.println();
                 int usedVNFMs = 0;
                 for (int i = 0; i < this.cfg.getW(); i++) {
-                    usedVNFMs += cplex.getValue(model.getyHat()[i]);
+                    usedVNFMs += phase2Cplex.getValue(phase2.getyHat()[i]);
                 }
                 writer.printf("%d VNFMs is used", usedVNFMs);
                 writer.println();
@@ -113,7 +113,7 @@ public class Solver implements Method {
                     for (int k = 0; k < cfg.getChains().get(h).nodes(); k++) {
                         for (int i = 0; i < cfg.getF(); i++) {
                             for (int j = 0; j < cfg.getW(); j++) {
-                                if (cplex.getValue(model.getZ()[i][j][k + v]) == 1) {
+                                if (phase2Cplex.getValue(phase2.getZ()[i][j][k + v]) == 1) {
                                     writer.printf("Node %d with type %d is mapped on %s\n", k, i, cfg.getNodes().get(j).getName());
                                 }
                             }
@@ -127,7 +127,7 @@ public class Solver implements Method {
                 writer.println(" >> Manager mapping");
                 for (int h = 0; h < cfg.getT(); h++) {
                     for (int i = 0; i < cfg.getW(); i++) {
-                        if (cplex.getValue(model.getzHat()[h][i]) == 1) {
+                        if (phase2Cplex.getValue(phase2.getzHat()[h][i]) == 1) {
                             writer.printf("Chain %d manager is %s\n", h, cfg.getNodes().get(i).getName());
                         }
                     }
@@ -138,7 +138,7 @@ public class Solver implements Method {
                 writer.println(" >> Manager instances");
                 for (int i = 0; i < cfg.getW(); i++) {
                     writer.printf("%s has %d manager instances\n",
-                            cfg.getNodes().get(i).getName(), (int) cplex.getValue(model.getyHat()[i]));
+                            cfg.getNodes().get(i).getName(), (int) phase2Cplex.getValue(phase2.getyHat()[i]));
                 }
                 writer.println();
 
@@ -152,7 +152,7 @@ public class Solver implements Method {
                             if (cfg.getE()[i][j] > 0) {
 
                                 for (int k = 0; k < cfg.getChains().get(h).links(); k++) {
-                                    if (cplex.getValue(model.getTau()[i][j][u + k]) == 1) {
+                                    if (phase2Cplex.getValue(phase2.getTau()[i][j][u + k]) == 1) {
                                         Link l = cfg.getChains().get(h).getLink(k);
                                         writer.printf("Chain %d link %d (%d - %d) is on %s - %s\n", h, k,
                                                 l.getSource(), l.getDestination(),
@@ -161,7 +161,7 @@ public class Solver implements Method {
                                 }
 
                                 for (int k = 0; k < cfg.getChains().get(h).nodes(); k++) {
-                                    if (cplex.getValue(model.getTauHat()[i][j][v + k]) == 1) {
+                                    if (phase2Cplex.getValue(phase2.getTauHat()[i][j][v + k]) == 1) {
                                         writer.printf("Chain %d node %d manager is on %s - %s\n", h, k,
                                                 cfg.getNodes().get(i).getName(), cfg.getNodes().get(j).getName());
                                     }
@@ -175,7 +175,7 @@ public class Solver implements Method {
                 }
                 writer.println();
            } else {
-                System.err.printf("Solve failed: %s\n", cplex.getStatus());
+                System.err.printf("Solve failed: %s\n", phase2Cplex.getStatus());
             }
         } catch (IloException e) {
             e.printStackTrace();

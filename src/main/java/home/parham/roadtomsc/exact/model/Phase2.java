@@ -10,7 +10,7 @@ import ilog.cplex.IloCplex;
  * Model creates variables, objective and constraints of mathematical
  * model of our problem in CPLEX.
  */
-public class Model {
+public class Phase2 {
     /**
      * modeler is a CPLEX model builder.
      */
@@ -89,7 +89,7 @@ public class Model {
      * @param pModeler CPLEX modeler instance
      * @param pCfg configuration instance
      */
-    public Model(final IloModeler pModeler, final Config pCfg) {
+    public Phase2(final IloModeler pModeler, final Config pCfg) {
         this.modeler = pModeler;
         this.cfg = pCfg;
     }
@@ -99,7 +99,7 @@ public class Model {
      *
      * @return Model
      */
-    public Model variables(IloIntVar[] x, IloIntVar[][] y, IloIntVar[][][] z, IloIntVar[][][] tau, IloCplex cplex) throws IloException {
+    public Phase2 variables(IloIntVar[] x, IloIntVar[][] y, IloIntVar[][][] z, IloIntVar[][][] tau, IloCplex cplex) throws IloException {
         xVariable(x, cplex);
         yVariable(y, cplex);
         zVariable(z, cplex);
@@ -236,7 +236,7 @@ public class Model {
      * @throws IloException
      * @return Model
      */
-    public Model objective() throws IloException {
+    public Phase2 objective() throws IloException {
         IloLinearNumExpr expr = this.modeler.linearNumExpr();
         for (int i = 0; i < this.cfg.getT(); i++) {
             expr.addTerm(this.cfg.getChains().get(i).getCost(), this.x[i]);
@@ -254,7 +254,7 @@ public class Model {
      * @return Model
      * @throws IloException
      */
-    public Model constraints() throws IloException {
+    public Phase2 constraints() throws IloException {
         this.nodeMemoryCPUConstraint();
         this.servicePlaceConstraint();
         /*
