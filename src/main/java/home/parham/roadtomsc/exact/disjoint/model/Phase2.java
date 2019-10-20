@@ -118,7 +118,7 @@ public class Phase2 {
         for (int i = 0; i < this.cfg.getT(); i++) {
             xNames[i] = String.format("x(%d)", i);
             int v = (int) cplex.getValue(x[i]);
-            this.x[i] = this.modeler.intVar(v, v, xNames[i]);
+            this.x[i] = this.modeler.intVar(0, v, xNames[i]);
         }
     }
 
@@ -134,7 +134,7 @@ public class Phase2 {
         for (int i = 0; i < this.cfg.getW(); i++) {
             for (int j = 0; j < this.cfg.getF(); j++) {
                 int v = (int) cplex.getValue(y[i][j]);
-                this.y[i][j] = this.modeler.intVar(v, v, yNames[i][j]);
+                this.y[i][j] = this.modeler.intVar(0, v, yNames[i][j]);
             }
         }
     }
@@ -167,7 +167,7 @@ public class Phase2 {
             for (int j = 0; j < this.cfg.getW(); j++) {
                 for (int k = 0; k < this.cfg.getV(); k++) {
                     int v = (int) cplex.getValue(z[i][j][k]);
-                    this.z[i][j][k] = modeler.intVar(v, v, zNames[i][j][k]);
+                    this.z[i][j][k] = modeler.intVar(0, v, zNames[i][j][k]);
                 }
             }
         }
@@ -221,7 +221,7 @@ public class Phase2 {
                         v = (int) cplex.getValue(tau[i][j][k]);
                     } catch (IloException e) {
                     }
-                    this.tau[i][j][k] = modeler.intVar(v, v, tauNames[i][j][k]);
+                    this.tau[i][j][k] = modeler.intVar(0, v, tauNames[i][j][k]);
                 }
 
                 for (int k = 0; k < this.cfg.getV(); k++) {
