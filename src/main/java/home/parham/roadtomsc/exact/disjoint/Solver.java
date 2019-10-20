@@ -11,11 +11,12 @@
  * =======================================
  */
 
-package home.parham.roadtomsc.exact;
+package home.parham.roadtomsc.exact.disjoint;
 
 import home.parham.roadtomsc.domain.Link;
-import home.parham.roadtomsc.exact.model.Phase2;
-import home.parham.roadtomsc.exact.model.Phase1;
+import home.parham.roadtomsc.exact.Config;
+import home.parham.roadtomsc.exact.disjoint.model.Phase2;
+import home.parham.roadtomsc.exact.disjoint.model.Phase1;
 import home.parham.roadtomsc.problem.Method;
 import home.parham.roadtomsc.problem.Solution;
 import ilog.concert.IloException;
@@ -40,7 +41,7 @@ public class Solver implements Method {
         // create and setup the result file
         PrintWriter writer;
         try {
-            writer = new PrintWriter(Files.newBufferedWriter(Paths.get("exact-result.txt")));
+            writer = new PrintWriter(Files.newBufferedWriter(Paths.get("disjoint-result.txt")));
         } catch (IOException e) {
             e.printStackTrace();
             return null;
