@@ -1,4 +1,4 @@
-package home.parham.roadtomsc.exact.model;
+package home.parham.roadtomsc.exact.disjoint.model;
 
 import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Types;
@@ -106,7 +106,7 @@ public class Phase2 {
         yHatVariable();
         zHatVariable();
 
-        TauHatVariable(tau, cplex);
+        tauTauHatVariable(tau, cplex);
 
         return this;
     }
@@ -189,7 +189,7 @@ public class Phase2 {
         }
     }
 
-    private void TauHatVariable(IloIntVar[][][] tau, IloCplex cplex) throws IloException {
+    private void tauTauHatVariable(IloIntVar[][][] tau, IloCplex cplex) throws IloException {
         // tau, tauHat
         String[][][] tauNames = new String[this.cfg.getW()][this.cfg.getW()][this.cfg.getU()];
         String[][][] tauHatNames = new String[this.cfg.getW()][this.cfg.getW()][this.cfg.getV()];

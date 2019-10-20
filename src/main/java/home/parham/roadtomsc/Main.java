@@ -7,8 +7,6 @@ import home.parham.roadtomsc.domain.Chain;
 import home.parham.roadtomsc.domain.Link;
 import home.parham.roadtomsc.domain.Node;
 import home.parham.roadtomsc.domain.Types;
-import home.parham.roadtomsc.exact.Solver;
-import home.parham.roadtomsc.heuristic.Bari;
 import home.parham.roadtomsc.problem.Config;
 import home.parham.roadtomsc.problem.ConfigBuilder;
 
@@ -135,8 +133,10 @@ public class Main {
         // build configuration
         Config cfg = builder.build();
 
-        // solve using the exact method
-        new Solver(cfg).solve();
+        // solve using the exact method (joint)
+        new home.parham.roadtomsc.exact.joint.Solver(cfg).solve();
+        // solve using the exact method (disjoint)
+        new home.parham.roadtomsc.exact.disjoint.Solver(cfg).solve();
 
         // solve using the heuristic method
         // System.out.println(new Bari(cfg).solve());
