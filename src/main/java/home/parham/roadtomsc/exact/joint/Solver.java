@@ -54,7 +54,7 @@ public class Solver implements Method {
 
             cplex.exportModel("joint.lp");
 
-            cplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
+            cplex.setParam(IloCplex.Param.TimeLimit, 30 * 60); // limit CPLEX time to 15 minute
 
             Instant now = Instant.now();
             boolean solved = cplex.solve();

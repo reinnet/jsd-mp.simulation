@@ -26,17 +26,15 @@ public interface ChainsConfig {
         List<NodeConfig> getNodes();
 
         interface LinkConfig {
-            String getSource();
+            int getSource();
 
-            String getDestination();
+            int getDestination();
 
             int getBandwidth();
         }
 
         interface NodeConfig {
             String getType();
-
-            String getID();
         }
     }
 }

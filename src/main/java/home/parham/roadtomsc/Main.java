@@ -9,6 +9,7 @@ import home.parham.roadtomsc.domain.Node;
 import home.parham.roadtomsc.domain.Types;
 import home.parham.roadtomsc.problem.Config;
 import home.parham.roadtomsc.problem.ConfigBuilder;
+import home.parham.roadtomsc.heuristic.Bari;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -112,12 +113,12 @@ public class Main {
         config.getChains().getChains().forEach(chainConfig -> {
             Chain chain = new Chain(chainConfig.getCost());
 
-            Map<String, Integer> vNodes = new HashMap<>();
+            Map<Integer, Integer> vNodes = new HashMap<>();
 
             for (int i = 0; i < chainConfig.getNodes().size(); i++) {
                 ChainsConfig.ChainConfig.NodeConfig n = chainConfig.getNodes().get(i);
                 chain.addNode(types.get(n.getType()));
-                vNodes.put(n.getID(), i);
+                vNodes.put(i, i);
             }
 
             chainConfig.getLinks().forEach(linkConfig -> chain.addLink(
@@ -136,9 +137,9 @@ public class Main {
         // solve using the exact method (joint)
         new home.parham.roadtomsc.exact.joint.Solver(cfg).solve();
         // solve using the exact method (disjoint)
-        new home.parham.roadtomsc.exact.disjoint.Solver(cfg).solve();
+        // new home.parham.roadtomsc.exact.disjoint.Solver(cfg).solve();
 
         // solve using the heuristic method
-        // System.out.println(new Bari(cfg).solve());
+        System.out.println(new Bari(cfg).solve());
     }
 }
