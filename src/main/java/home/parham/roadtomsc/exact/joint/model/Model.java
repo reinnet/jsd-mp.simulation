@@ -370,14 +370,14 @@ public class Model {
             for (int j = 0; j < this.cfg.getW(); j++) {
                 // physical node without have egress support must have zero instance with egress type
                 if (!this.cfg.getNodes().get(j).isEgress()) {
-                    physicalNodeWithoutTypeConstraint(i, j);
+                    physicalNodeWithoutTypeConstraint(i, j, "egress");
                 }
             }
         }
     }
 
     /**
-     * make all physical node that does not have egress support to have zero instance with egress type
+     * make all physical node that does not have ingress support to have zero instance with ingress type
      * @throws IloException
      */
     private void ingressConstraint() throws IloException {
@@ -386,28 +386,26 @@ public class Model {
                 continue;
             }
             for (int j = 0; j < this.cfg.getW(); j++) {
-                // physical node without have egress support must have zero instance with ingress type
+                // physical node without have ingress support must have zero instance with ingress type
                 if (!this.cfg.getNodes().get(j).isIngress()) {
-                    physicalNodeWithoutTypeConstraint(i, j);
+                    physicalNodeWithoutTypeConstraint(i, j, "ingress");
                 }
             }
         }
     }
 
     /**
-     * make the physical node with index _i_ to have zero instance with type _j_
+     * make the physical node with index _j_ to have zero instance with type _i_
      * this function is used by ingress/egress constraints
      * @param i type index
      * @param j physical node index
      */
-    private void physicalNodeWithoutTypeConstraint(int i, int j) throws IloException {
+    private void physicalNodeWithoutTypeConstraint(int i, int j, String type) throws IloException {
         IloLinearIntExpr constraint = this.modeler.linearIntExpr();
 
-        for (int k = 0; k < this.cfg.getV(); k++) {
-            constraint.addTerm(1, this.z[i][j][k]);
-        }
+        constraint.addTerm(1, this.y[j][i]);
 
-        this.modeler.addEq(constraint, 0, String.format("egress_constraint_type{%d}_node{%d}", i, j));
+        this.modeler.addEq(constraint, 0, String.format("%s_constraint_type{%d}_node{%d}", type, i, j));
     }
 
     /**
