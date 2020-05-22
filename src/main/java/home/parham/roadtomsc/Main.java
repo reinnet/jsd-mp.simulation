@@ -9,7 +9,6 @@ import home.parham.roadtomsc.domain.Node;
 import home.parham.roadtomsc.domain.Types;
 import home.parham.roadtomsc.problem.Config;
 import home.parham.roadtomsc.problem.ConfigBuilder;
-import home.parham.roadtomsc.heuristic.Bari;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -70,22 +69,14 @@ public class Main {
 
         // physical links {{{
         config.getTopology().getLinks().forEach(linkConfig -> {
-            Link l1 = new Link(
+            Link l = new Link(
                     linkConfig.getBandwidth(),
                     nodes.get(linkConfig.getSource()),
                     nodes.get(linkConfig.getDestination())
             );
-            builder.addLink(l1);
+            builder.addLink(l);
             logger.info(String.format("create physical link from %s to %s [%s]",
-                    linkConfig.getSource(), linkConfig.getDestination(), l1));
-            Link l2 = new Link(
-                    linkConfig.getBandwidth(),
-                    nodes.get(linkConfig.getDestination()),
-                    nodes.get(linkConfig.getSource())
-            );
-            builder.addLink(l2);
-            logger.info(String.format("create physical link from %s to %s [%s]",
-                    linkConfig.getDestination(), linkConfig.getSource(), l2));
+                    linkConfig.getSource(), linkConfig.getDestination(), l));
         });
         /// }}}
 
@@ -137,9 +128,7 @@ public class Main {
         // solve using the exact method (joint)
         new home.parham.roadtomsc.exact.joint.Solver(cfg).solve();
         // solve using the exact method (disjoint)
-        // new home.parham.roadtomsc.exact.disjoint.Solver(cfg).solve();
+        new home.parham.roadtomsc.exact.disjoint.Solver(cfg).solve();
 
-        // solve using the heuristic method
-        System.out.println(new Bari(cfg).solve());
     }
 }
