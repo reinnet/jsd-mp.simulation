@@ -49,13 +49,11 @@ public class Solver implements Method {
 
         try {
             IloCplex phase1Cplex = new IloCplex();
-
-
             Phase1 phase1 = new Phase1(phase1Cplex, cfg);
             phase1.variables().objective().constraints();
 
             phase1Cplex.exportModel("phase-1.lp");
-            phase1Cplex.setParam(IloCplex.Param.TimeLimit, 5 * 60); // limit CPLEX time to 15 minute
+            phase1Cplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
             if (!phase1Cplex.solve()) {
                 return null;
             }
@@ -66,7 +64,7 @@ public class Solver implements Method {
 
             phase2Cplex.exportModel("phase-2.lp");
 
-            phase2Cplex.setParam(IloCplex.Param.TimeLimit, 5 * 60); // limit CPLEX time to 15 minute
+            phase2Cplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
 
             Instant now = Instant.now();
             boolean solved = phase2Cplex.solve();
@@ -138,8 +136,8 @@ public class Solver implements Method {
                 writer.println();
                 writer.println(" >> Manager instances");
                 for (int i = 0; i < cfg.getW(); i++) {
-                    writer.printf("%s has %d manager instances\n",
-                            cfg.getNodes().get(i).getName(), (int) phase2Cplex.getValue(phase2.getyHat()[i]));
+                    writer.printf("%s has %f manager instances\n",
+                            cfg.getNodes().get(i).getName(), phase2Cplex.getValue(phase2.getyHat()[i]));
                 }
                 writer.println();
 
