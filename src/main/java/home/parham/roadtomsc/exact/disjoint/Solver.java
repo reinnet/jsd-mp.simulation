@@ -53,7 +53,7 @@ public class Solver implements Method {
             phase1.variables().objective().constraints();
 
             phase1Cplex.exportModel("phase-1.lp");
-            phase1Cplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
+            phase1Cplex.setParam(IloCplex.Param.TimeLimit, 5 * 60); // limit CPLEX time to 5 minute
             if (!phase1Cplex.solve()) {
                 return null;
             }
@@ -64,7 +64,7 @@ public class Solver implements Method {
 
             phase2Cplex.exportModel("phase-2.lp");
 
-            phase2Cplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
+            phase2Cplex.setParam(IloCplex.Param.TimeLimit, 5 * 60); // limit CPLEX time to 5 minute
 
             Instant now = Instant.now();
             boolean solved = phase2Cplex.solve();
