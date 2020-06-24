@@ -54,7 +54,7 @@ public class Solver implements Method {
 
             cplex.exportModel("joint.lp");
 
-            cplex.setParam(IloCplex.Param.TimeLimit, 15 * 60); // limit CPLEX time to 15 minute
+            cplex.setParam(IloCplex.Param.MIP.Tolerances.MIPGap, 0.05); // 5% MIP Gap
 
             Instant now = Instant.now();
             boolean solved = cplex.solve();
@@ -63,6 +63,10 @@ public class Solver implements Method {
             if (solved) {
                 writer.println();
                 writer.println(" Solution Status = " + cplex.getStatus());
+                writer.println();
+
+                writer.println();
+                writer.println(" gap = " + cplex.getMIPRelativeGap());
                 writer.println();
 
                 writer.println();
